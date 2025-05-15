@@ -343,22 +343,22 @@ select, input[type="number"] {
 @media (max-width: 768px) {
   /* Make product name bigger on phones */
   .product-name {
-    font-size: 40px;
+    font-size:30px;
   }
 
   /* Make select and quantity input boxes bigger */
   select, input[type="number"] {
-    font-size: 30px;
-    padding: 20px;
+    font-size:20px;
+    padding: 10px;
   }
 
   /* Make logo bigger */
   .logo {
-    height: 200px;
+    height: 150px;
   }
 
   /* Make top icons (settings and basket) bigger */
   .icon {
-    height: 80px;
+    height: 50px;
   }
 }
