@@ -126,10 +126,26 @@ body {
 /* Product Grid */
 .products-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: 25px;
   padding: 40px;
+  grid-template-columns: repeat(3, 1fr);
 }
+
+/* For phones and small screens */
+@media (max-width: 768px) {
+  .products-container {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 20px;
+  }
+}
+
+/* Optional: for very small phones */
+@media (max-width: 480px) {
+  .products-container {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 .product {
   background-color: #111;
