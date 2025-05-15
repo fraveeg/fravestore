@@ -139,6 +139,13 @@ body {
   }
 }
 
+/* Optional: for very small phones */
+@media (max-width: 480px) {
+  .products-container {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 
 .product {
@@ -346,3 +353,4 @@ select, input[type="number"] {
   color: #fff;
   font-size: 16px;
 }
+
