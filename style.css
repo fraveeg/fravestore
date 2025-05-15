@@ -128,23 +128,9 @@ body {
   display: grid;
   gap: 25px;
   padding: 40px;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr); /* always 2 per row */
 }
 
-/* For phones and small screens */
-@media (max-width: 768px) {
-  .products-container {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 20px;
-  }
-}
-
-/* Optional: for very small phones */
-@media (max-width: 480px) {
-  .products-container {
-    grid-template-columns: 1fr;
-  }
-}
 
 
 
@@ -357,22 +343,22 @@ select, input[type="number"] {
 @media (max-width: 768px) {
   /* Make product name bigger on phones */
   .product-name {
-    font-size: 26px;
+    font-size: 40px;
   }
 
   /* Make select and quantity input boxes bigger */
   select, input[type="number"] {
-    font-size: 20px;
-    padding: 10px;
+    font-size: 30px;
+    padding: 20px;
   }
 
   /* Make logo bigger */
   .logo {
-    height: 150px;
+    height: 200px;
   }
 
   /* Make top icons (settings and basket) bigger */
   .icon {
-    height: 50px;
+    height: 80px;
   }
 }
