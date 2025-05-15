@@ -1,0 +1,340 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lobster&display=swap');
+
+body {
+  margin: 0;
+  background-color: #000;
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Top Icons */
+.top-icons {
+  position: absolute;
+  top: 15px;
+  left: 30px;
+  right: 30px;
+  display: flex;
+  justify-content: space-between;
+  z-index: 10;
+}
+
+.icon {
+  height: 40px;
+  cursor: pointer;
+}
+
+/* Settings & Basket Menu */
+.menu, .basket-menu {
+  position: absolute;
+  top: 60px;
+  background-color: #fff;
+  color: #000;
+  border-radius: 10px;
+  padding: 15px;
+  width: 260px;
+  display: none;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  z-index: 20;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.menu { left: 30px; width: 170px; }
+.basket-menu { right: 30px; }
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.menu li {
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+}
+.menu li:last-child { border-bottom: none; }
+
+.basket-items {
+  max-height: 200px;
+  overflow-y: auto;
+}
+.total-price {
+  font-weight: bold;
+  margin-top: 10px;
+}
+.checkout-btn {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Logo */
+.logo-banner {
+  background-color: #f5f5dc;
+  text-align: center;
+  padding: 30px 0;
+}
+.logo {
+  height: 120px;
+}
+
+/* Slogan */
+.slogan {
+  text-align: center;
+  margin: 50px 0 20px;
+}
+.slogan h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 64px;
+  margin: 10px 0;
+}
+.sub-slogan {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  color: #ccc;
+  margin-bottom: 30px;
+}
+.shop-button {
+  background-color: transparent;
+  color: white;
+  padding: 12px 36px;
+  font-size: 18px;
+  font-family: 'Ethnocentric', sans-serif;
+  text-decoration: none;
+  border: 1px solid white; /* Thin white outline */
+  border-radius: 0; /* Sharp corners */
+  letter-spacing: 1px;
+  font-weight: 300;
+  text-transform: uppercase;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+
+
+.shop-button:hover {
+  background-color: black;
+  color: white;
+  transform: scale(1.05);
+}
+
+
+
+/* Product Grid */
+.products-container {
+  display: grid;
+  gap: 25px;
+  padding: 40px;
+  grid-template-columns: repeat(2, 1fr); /* always 2 per row */
+}
+
+
+
+.product {
+  background-color: #111;
+  border-radius: 15px;
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+.product:hover {
+  transform: scale(1.03);
+}
+.product img {
+  width: 100%;
+  max-width: 160px;
+  border-radius: 10px;
+}
+
+/* Options & Button */
+.product-name {
+  font-size: 20px;
+  margin: 10px 0 5px;
+}
+.price, .quantity-label {
+  margin-top: 10px;
+  display: block;
+  font-size: 16px;
+}
+select, input[type="number"] {
+  margin-top: 5px;
+  padding: 5px;
+  width: 100%;
+}
+.add-btn {
+  margin-top: 10px;
+  border: 1px solid white;
+  color: white;
+  background-color: transparent;
+  padding: 10px;
+  width: 100%;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+.add-btn:hover {
+  background-color: white;
+  color: black;
+}
+
+/* Footer */
+.footer-description, .since {
+  text-align: center;
+  font-size: 22px;
+  color: #ddd;
+  margin-top: 40px;
+}
+.social-icons {
+  margin-top: 10px;
+}
+.social-icons img {
+  height: 36px;
+  margin: 0 8px;
+  transition: transform 0.3s ease;
+}
+.social-icons img:hover {
+  transform: scale(1.2);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.feature-highlight {
+  text-align: center;
+  margin: 30px auto;
+  font-size: 20px;
+  max-width: 600px;
+}
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+
+/* Zoom on hover for product images */
+.product-img {
+  transition: transform 0.3s ease;
+}
+.product-img:hover {
+  transform: scale(1.1);
+}
+
+/* Product info style */
+.product-name {
+  font-size: 20px;
+  margin: 10px 0 5px;
+  font-family: 'Orbitron', sans-serif;
+  border-bottom: 2px solid red;
+  padding-bottom: 5px;
+}
+
+.price, .quantity-label, .add-btn {
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* Basket item layout */
+.basket-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.basket-item-details {
+  display: flex;
+  align-items: center;
+}
+
+.basket-item img {
+  width: 60px;
+  border-radius: 8px;
+}
+.basket-item button {
+  background: red;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+.remove-btn {
+  background-color: #cc0000;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.remove-btn:hover {
+  background-color: red;
+}
+.product-img {
+  width: 100%;
+  max-width: 160px;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.product:hover .product-img {
+  transform: scale(2); /* 80% zoom in (original + 80%) */
+}
+.product-img {
+  width: 100%;
+  max-width: 160px;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+.product-img:hover {
+  transform: scale(1.15);
+}
+.basket-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+.basket-img {
+  height: 50px;
+  width: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+.basket-item-details {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+.remove-btn {
+  background-color: #444;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 10px;
+}
+.remove-btn:hover {
+  background-color: #ff4d4d;
+}
+
+
+.price, .quantity-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  margin-top: 10px;
+  display: block;
+  color: #ddd;
+}
+select, input[type="number"] {
+  border: 1px solid #fff;
+  background-color: #222;
+  color: #fff;
+  font-size: 16px;
+}
