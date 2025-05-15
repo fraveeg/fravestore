@@ -354,3 +354,25 @@ select, input[type="number"] {
   color: #fff;
   font-size: 16px;
 }
+@media (max-width: 768px) {
+  /* Make product name bigger on phones */
+  .product-name {
+    font-size: 26px;
+  }
+
+  /* Make select and quantity input boxes bigger */
+  select, input[type="number"] {
+    font-size: 20px;
+    padding: 10px;
+  }
+
+  /* Make logo bigger */
+  .logo {
+    height: 150px;
+  }
+
+  /* Make top icons (settings and basket) bigger */
+  .icon {
+    height: 50px;
+  }
+}
