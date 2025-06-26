@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Frave Posters</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lobster&family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/ethnocentric" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="top-icons">
+        <img src="images/settings.png" alt="Settings" class="icon" id="settingsIcon">
+        <i class="fas fa-search icon" id="searchIcon"></i>
+        <img src="images/basket.png" alt="Basket" class="icon" id="basketIcon">
+    </div>
+
+    <div class="menu" id="settingsMenu">
+        <ul>
+            <li><a href="#" class="category-link">Category</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <ul class="submenu" id="categorySubMenu">
+            <li><a href="shop.html">Framed Posters</a></li>
+            <li><a href="posters.html">Posters</a></li>
+            <li><a href="stickers.html">Stickers</a></li>
+            <li><a href="all_products.html">All Products</a></li>
+        </ul>
+    </div>
+
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search products..." autofocus>
+            <button id="searchCloseBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="search-results" id="searchResults"></div>
+    </div>
+
+    <div class="basket-menu" id="basketMenu">
+        <div class="basket-items" id="basketItems">
+            <p>Your basket is empty.</p>
+        </div>
+        <div class="total-price" id="totalPrice">Total: 0 L.E</div>
+        <button class="checkout-btn" id="checkoutBtn">Checkout</button>
+    </div>
+
+    <div class="filter-overlay" id="filterOverlay">
+        <div class="filter-header">
+            <h3>Filters</h3>
+            <button class="filter-close-btn" id="filterCloseBtn">&times;</button>
+        </div>
+        <div class="filter-section">
+            <h4>Product Type</h4>
+            <div class="filter-option">
+                <input type="checkbox" id="filterPosters" value="Poster" checked disabled>
+                <label for="filterPosters">Posters</label>
+            </div>
+        </div>
+        <div class="filter-section">
+            <h4>Price Range</h4>
+            <input type="range" id="priceRangeSlider" min="0" max="200" value="200"> <div class="price-range-output">
+                <span id="minPrice">0 L.E</span>
+                <span id="maxPrice">200 L.E</span>
+            </div>
+        </div>
+        <div class="filter-section">
+            <h4>Sort By</h4>
+            <div class="filter-option">
+                <input type="radio" id="sortLowToHigh" name="sortOrder" value="lowToHigh">
+                <label for="sortLowToHigh">Price: Low to High</label>
+            </div>
+            <div class="filter-option">
+                <input type="radio" id="sortHighToLow" name="sortOrder" value="highToLow">
+                <label for="sortHighToLow">Price: High to Low</label>
+            </div>
+            <div class="filter-option">
+                <input type="radio" id="sortDefault" name="sortOrder" value="default" checked>
+                <label for="sortDefault">Default Order</label>
+            </div>
+        </div>
+        <div class="filter-actions">
+            <button class="filter-btn" id="applyFiltersBtn">Apply Filters</button>
+            <button class="filter-btn filter-clear-btn" id="clearFiltersBtn">Clear Filters</button>
+        </div>
+    </div>
+
+    <div class="logo-banner">
+        <img src="images/logo.png" alt="Logo" class="logo" />
+    </div>
+
+    <div id="functionalityWarning" class="warning-message">
+        <p>If buttons or menu don't work please refresh the page.</p>
+    </div>
+    <div class="products-page-controls">
+        <span class="product-count" id="productCount">0 Products</span>
+        <i class="fas fa-filter icon products-filter-icon" id="filterIcon"></i>
+    </div>
+
+    <div class="products-container" id="productsContainer"></div>
+
+    <div class="footer-description">
+        High-quality framed posters and stickers
+    </div>
+    <div class="since">
+        Since 2025
+        <div class="social-icons">
+            <a href="https://www.instagram.com/frave.eg" target="_blank"><img src="images/ig.png" alt="Instagram" /></a>
+            <a href="https://www.tiktok.com/@frave.eg" target="_blank"><img src="images/tiktok.png" alt="TikTok" /></a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="posters.js"></script>
+</body>
+</html>

@@ -1,0 +1,1105 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+
+/* --- IMPORTANT: REMOVE ANY PREVIOUS "CRITICAL DEBUGGING" CSS BLOCKS --- */
+/* Ensure you do NOT have any rules like:
+#settingsMenu, #basketMenu, #searchOverlay { display: none !important; pointer-events: none !important; ... }
+These were for debugging and will prevent your menus from working now.
+*/
+
+body {
+    margin: 0;
+    background-color: #000;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden; /* Prevent horizontal scroll for animations */
+}
+
+/* Page Entry Animation */
+body.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+}
+body.fade-in.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+/* Top Icons */
+.top-icons {
+    position: fixed;
+    top: 15px;
+    left: 30px;
+    right: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    background: transparent;
+}
+
+.icon {
+    height: 40px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+/* Settings Icon Rotation Animation */
+#settingsIcon.rotated {
+    transform: rotate(90deg);
+}
+#settingsIcon:hover {
+    transform: scale(1.1);
+}
+.fa-search, .fa-filter { /* Style for Font Awesome search and filter icons */
+    font-size: 30px;
+    color: white;
+    margin: 0 15px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.fa-search:hover, .fa-filter:hover {
+    transform: scale(1.1);
+}
+
+
+/* --- Settings & Basket Menu (Enhanced Design & Animations) --- */
+.menu, .basket-menu {
+    position: fixed;
+    top: 70px;
+    background-color: rgba(25, 25, 25, 0.95); /* Darker, semi-transparent background */
+    color: #fff; /* White text */
+    border-radius: 15px; /* More rounded corners */
+    padding: 20px; /* More padding */
+    width: 280px; /* Slightly wider */
+    display: none;
+    opacity: 0;
+    transform: translateY(-20px); /* Deeper slide from top */
+    box-shadow: 0 5px 25px rgba(255, 0, 0, 0.4); /* Red glowing shadow */
+    z-index: 90;
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.menu.is-visible, .basket-menu.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    display: block;
+}
+
+.menu { left: 30px; width: 220px; } /* Adjust width for settings menu */
+.basket-menu { right: 30px; }
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.menu li {
+    padding: 12px 0; /* More vertical padding */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Subtle white border */
+    transform: translateX(-20px); /* Initial state for animation */
+    opacity: 0;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+/* Animate list items in after menu is visible */
+.menu.is-visible li {
+    transform: translateX(0);
+    opacity: 1;
+}
+.menu.is-visible li:nth-child(1) { transition-delay: 0.1s; }
+.menu.is-visible li:nth-child(2) { transition-delay: 0.2s; }
+.menu.is-visible li:nth-child(3) { transition-delay: 0.3s; }
+/* Add more :nth-child rules if you have more top-level menu items */
+
+
+.menu li:last-child { border-bottom: none; }
+.menu a {
+    color: #fff; /* White text for links */
+    text-decoration: none;
+    display: block;
+    font-size: 1.1em; /* Slightly larger font */
+    font-family: 'Bebas Neue', sans-serif; /* Consistent font */
+    letter-spacing: 1px;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+.menu a:hover {
+    color: red; /* Red highlight on hover */
+    transform: translateX(8px); /* More pronounced slide effect */
+}
+
+/* Category Sub-menu */
+.submenu {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 15px;
+    border-left: 2px solid red;
+    display: none;
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+.submenu.is-visible {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+.submenu li {
+    padding: 8px 0;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    transform: translateX(-10px); /* Subtle sub-menu item animation */
+    opacity: 0;
+    transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+}
+.submenu.is-visible li {
+    transform: translateX(0);
+    opacity: 1;
+}
+.submenu.is-visible li:nth-child(1) { transition-delay: 0.1s; }
+.submenu.is-visible li:nth-child(2) { transition-delay: 0.15s; }
+.submenu.is-visible li:nth-child(3) { transition-delay: 0.2s; }
+.submenu.is-visible li:nth-child(4) { transition-delay: 0.25s; }
+.submenu li:last-child {
+    border-bottom: none;
+}
+.submenu a {
+    font-size: 0.95em; /* Slightly larger sub-menu font */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Default font for sub-menu */
+    letter-spacing: 0;
+}
+
+
+/* Basket Menu (inherited from .menu, but specific styles below) */
+.basket-items {
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+/* Custom Scrollbar for basket-items */
+.basket-items::-webkit-scrollbar {
+    width: 8px;
+}
+.basket-items::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+.basket-items::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+.basket-items::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.total-price {
+    font-weight: bold;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: red; /* Highlight total price */
+    font-size: 1.2em;
+}
+.checkout-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    margin-top: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1px;
+}
+.checkout-btn:hover {
+    background-color: #cc0000;
+    transform: scale(1.02);
+}
+
+/* Logo Banner */
+.logo-banner {
+    background-color: #f5f5dc;
+    text-align: center;
+    padding: 30px 0;
+    background-image: url('images/logo_background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    z-index: 1;
+    padding-top: 100px;
+}
+.logo {
+    height: 120px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Functionality Warning Message (Text-Only, Styled) */
+.warning-message {
+    background-color: transparent;
+    color: #fbc02d;
+    border: none;
+    padding: 15px 20px;
+    margin: 20px auto;
+    text-align: center;
+    max-width: 700px;
+    font-family: 'Ethnocentric', sans-serif;
+    font-size: 1.1em;
+    font-weight: 300;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    box-shadow: none;
+    display: block;
+    z-index: 50;
+    position: relative;
+    opacity: 0.9;
+}
+
+.warning-message p {
+    margin-bottom: 0;
+    color: inherit;
+}
+
+
+/* Slogan */
+.slogan {
+    text-align: center;
+    margin: 50px 0 20px;
+}
+.slogan h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    margin: 10px 0;
+    animation: slideInFromTop 1s ease-out;
+}
+.sub-slogan {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    color: #ccc;
+    margin-bottom: 30px;
+    animation: fadeIn 1.5s ease-out;
+}
+.shop-button {
+    background-color: transparent;
+    color: white;
+    padding: 12px 36px;
+    font-size: 18px;
+    font-family: 'Ethnocentric', sans-serif;
+    text-decoration: none;
+    border: 1px solid white;
+    border-radius: 0;
+    letter-spacing: 1px;
+    font-weight: 300;
+    text-transform: uppercase;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+.shop-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Product Carousel */
+.carousel-container {
+    position: relative;
+    width: 80%;
+    max-width: 800px;
+    margin: 40px auto;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 2s ease-out;
+}
+
+.carousel-slide {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border-radius: 15px;
+}
+
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 24px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+.carousel-nav:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+.carousel-nav.prev {
+    left: 10px;
+}
+.carousel-nav.next {
+    right: 10px;
+}
+
+
+/* Search Overlay */
+.search-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 110;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 100px;
+    box-sizing: border-box;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-out;
+}
+.search-overlay.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+
+.search-box {
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+}
+#searchInput {
+    width: 100%;
+    padding: 15px 50px 15px 20px;
+    font-size: 20px;
+    border: 2px solid #ccc;
+    border-radius: 30px;
+    background-color: #333;
+    color: white;
+    outline: none;
+    box-sizing: border-box;
+}
+#searchInput::placeholder {
+    color: #aaa;
+}
+#searchInput:focus {
+    border-color: red;
+}
+#searchCloseBtn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #ccc;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+#searchCloseBtn:hover {
+    color: red;
+}
+
+.search-results {
+    width: 90%;
+    max-width: 600px;
+    background-color: #222;
+    border-radius: 10px;
+    margin-top: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 10px 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+.search-results p.search-tip {
+    color: #aaa;
+    text-align: center;
+    padding: 20px;
+}
+.search-result-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: white;
+    border-bottom: 1px solid #444;
+    transition: background-color 0.2s ease;
+}
+.search-result-item:last-child {
+    border-bottom: none;
+}
+.search-result-item:hover {
+    background-color: #333;
+}
+.search-result-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 15px;
+}
+.search-result-item div {
+    flex-grow: 1;
+}
+.search-result-name {
+    margin: 0;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+.search-result-category {
+    margin: 0;
+    font-size: 0.9em;
+    color: #aaa;
+}
+
+/* --- Product Grid --- */
+.products-page-controls { /* Container for product count and filter icon */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px; /* Match products-container max-width if it has one */
+    margin: 20px auto 0 auto; /* Adjust top margin for fixed header */
+    padding: 0 40px; /* Match products-container padding */
+    color: #ddd;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2em;
+    letter-spacing: 1px;
+    padding-top: 100px; /* Space for fixed top bar */
+}
+.product-count {
+    /* Styles for the product count text */
+    flex-grow: 1; /* Take up available space */
+    text-align: left;
+}
+.products-container {
+    display: grid;
+    gap: 25px;
+    padding: 40px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
+    justify-content: center; /* Center items in grid */
+    max-width: 1200px; /* Align with controls */
+    margin: 0 auto; /* Center the grid */
+}
+
+.product {
+    background-color: #111;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 0.8s ease-out; /* Animation for individual products */
+}
+.product:nth-child(even) { animation-delay: 0.1s; } /* Stagger animation */
+.product:nth-child(odd) { animation-delay: 0.2s; }
+
+.product:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 25px rgba(255, 0, 0, 0.2);
+}
+.product img {
+    width: 100%;
+    max-width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+.product:hover .product-img {
+    transform: scale(1.15);
+}
+
+/* Options & Button */
+.product-name {
+    font-size: 24px;
+    margin: 15px 0 10px;
+    font-family: 'Orbitron', sans-serif;
+    border-bottom: 2px solid red;
+    padding-bottom: 8px;
+    word-wrap: break-word;
+}
+.price, .quantity-label {
+    margin-top: 10px;
+    display: block;
+    font-size: 18px;
+    font-family: 'Bebas Neue', sans-serif;
+    color: #ddd;
+}
+select, input[type="number"] {
+    margin-top: 5px;
+    padding: 8px;
+    width: calc(100% - 16px);
+    border: 1px solid #fff;
+    background-color: #222;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M287%20165.7L154.7%2033.4c-6.8-6.8-17.6-6.8-24.4%200l-132.3%20132.3c-6.8%206.8-6.8%2017.6%200%2024.4l24.4%2024.4c6.8%206.8%2017.6%206.8%2024.4%200l90.3-90.3L238.2%20214.5c6.8%206.8%2017.6%206.8%2024.4%200l24.4-24.4c6.8-6.8%206.8-17.6%200-24.4z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 8px top 50%;
+    background-size: 12px auto;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.add-btn {
+    margin-top: 15px;
+    border: 2px solid red;
+    color: white;
+    background-color: transparent;
+    padding: 12px;
+    width: 100%;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: all 0.2s ease;
+    border-radius: 5px;
+}
+.add-btn:hover {
+    background-color: red;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(255, 0, 0, 0.4);
+}
+
+/* Footer */
+.feature-highlight, .footer-description, .since {
+    text-align: center;
+    font-size: 22px;
+    color: #ddd;
+    margin-top: 40px;
+    animation: fadeIn 1.5s ease-out;
+}
+.social-icons {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.social-icons img {
+    height: 38px;
+    margin: 0 10px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+.social-icons img:hover {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 8px red);
+}
+
+/* Basket Item Layout */
+.basket-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 12px;
+}
+.basket-item:last-child {
+    border-bottom: none;
+}
+.basket-img {
+    height: 60px;
+    width: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 12px;
+}
+.basket-item-details {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+.basket-item-name {
+    margin: 0;
+    font-weight: bold;
+    font-size: 1em;
+}
+.basket-item-price {
+    margin: 0;
+    font-size: 0.9em;
+    color: #555;
+}
+.remove-btn {
+    background-color: #cc0000;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 10px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.remove-btn:hover {
+    background-color: red;
+    transform: scale(1.05);
+}
+
+
+/* --- Filter Overlay Styles --- */
+.filter-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 320px; /* Width of the filter sidebar */
+    height: 100%;
+    background-color: rgba(25, 25, 25, 0.98); /* Slightly darker, almost opaque */
+    z-index: 95; /* Above menus, below search overlay */
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5); /* Shadow to the left */
+    transform: translateX(100%); /* Start off-screen to the right */
+    opacity: 0; /* Start hidden */
+    transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+    display: flex; /* Use flexbox for content arrangement */
+    flex-direction: column;
+    pointer-events: none; /* Prevents clicks when hidden */
+    overflow-y: auto; /* Allow scrolling for filter options */
+}
+
+.filter-overlay.is-visible {
+    transform: translateX(0); /* Slide in */
+    opacity: 1; /* Fade in */
+    pointer-events: auto; /* Allow clicks when visible */
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.filter-header h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8em;
+    color: red;
+    margin: 0;
+}
+.filter-close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+.filter-close-btn:hover {
+    color: red;
+}
+
+.filter-section {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.05); /* Lighter separator */
+}
+.filter-section:last-child {
+    border-bottom: none;
+}
+.filter-section h4 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1em;
+    color: #ddd;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+/* Filter Checkboxes/Radio Buttons */
+.filter-option {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 0.95em;
+    color: #bbb;
+}
+.filter-option input[type="checkbox"] {
+    margin-right: 10px;
+    accent-color: red; /* Highlight checkbox */
+}
+/* Price Range Slider */
+.price-range-slider {
+    width: 100%;
+    margin-top: 10px;
+}
+.price-range-output {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+    color: #ccc;
+    margin-top: 5px;
+}
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    background: #555;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    border-radius: 5px;
+}
+input[type="range"]:hover {
+    opacity: 1;
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: red;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.6);
+}
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: red;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.6);
+}
+
+/* Filter Action Buttons */
+.filter-actions {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.filter-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.filter-btn:hover {
+    background-color: #cc0000;
+    transform: translateY(-2px);
+}
+.filter-clear-btn {
+    background-color: #555;
+}
+.filter-clear-btn:hover {
+    background-color: #777;
+}
+
+/* General Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInFromTop {
+    from { opacity: 0; transform: translateY(-50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .top-icons {
+        left: 15px;
+        right: 15px;
+        top: 10px;
+    }
+    .icon {
+        height: 50px;
+    }
+    .fa-search, .fa-filter {
+        font-size: 35px;
+    }
+
+    .menu { left: 15px; width: 180px; top: 60px; }
+    .basket-menu { right: 15px; width: 280px; top: 60px; }
+
+    .logo {
+        height: 150px;
+    }
+    .logo-banner {
+        padding-top: 80px;
+    }
+
+    .slogan h1 {
+        font-size: 48px;
+    }
+    .sub-slogan {
+        font-size: 20px;
+    }
+    .shop-button {
+        padding: 10px 25px;
+        font-size: 16px;
+    }
+
+    .carousel-container {
+        width: 95%;
+        margin: 20px auto;
+    }
+    .carousel-slide img {
+        height: 250px;
+    }
+
+    .feature-highlight, .footer-description, .since {
+        font-size: 18px;
+        margin-top: 25px;
+    }
+    .social-icons img {
+        height: 32px;
+    }
+
+    /* Product Page Controls & Grid for Mobile */
+    .products-page-controls {
+        padding: 0 15px;
+        font-size: 1em;
+        padding-top: 80px; /* Adjust for fixed header */
+    }
+    .products-container {
+        padding: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        padding-top: 0; /* No extra padding here as controls div handles it */
+    }
+
+    .product-name {
+        font-size: 20px;
+    }
+    .price, .quantity-label {
+        font-size: 16px;
+    }
+    select, input[type="number"] {
+        font-size: 14px;
+        padding: 6px;
+    }
+    .add-btn {
+        padding: 10px;
+        font-size: 1em;
+    }
+
+    .search-box {
+        width: 95%;
+    }
+    #searchInput {
+        font-size: 18px;
+        padding: 12px 45px 12px 15px;
+    }
+    #searchCloseBtn {
+        font-size: 20px;
+    }
+    .search-result-item {
+        padding: 8px 15px;
+    }
+    .search-result-item img {
+        width: 50px;
+        height: 50px;
+    }
+    .warning-message {
+        font-size: 0.9em;
+        padding: 10px 15px;
+    }
+
+    /* Filter Overlay for Mobile */
+    .filter-overlay {
+        width: 100%; /* Full width on mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .icon {
+        height: 40px;
+    }
+    .fa-search, .fa-filter {
+        font-size: 30px;
+    }
+    .menu, .basket-menu {
+        width: calc(100% - 30px);
+        left: 15px;
+        right: 15px;
+        top: 55px;
+    }
+    .carousel-slide img {
+        height: 180px;
+    }
+    .products-container {
+        grid-template-columns: 1fr;
+        padding: 15px;
+    }
+    .slogan h1 {
+        font-size: 38px;
+    }
+    .sub-slogan {
+        font-size: 18px;
+    }
+    .products-page-controls {
+        padding-top: 70px; /* Adjust for smaller header */
+    }
+}
+/* Add to style.css */
+
+/* Custom Design Option */
+.custom-design-option {
+    margin-top: 10px;
+    margin-bottom: 15px; /* Space before Add to Basket button */
+    text-align: left; /* Align to the left within product box */
+    color: #fff;
+    display: block; /* Ensure it takes full width */
+    padding: 5px 0;
+    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    padding-top: 10px;
+}
+
+.custom-design-option label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1em;
+    letter-spacing: 0.5px;
+}
+
+.custom-design-option input[type="checkbox"] {
+    margin-right: 8px;
+    width: 20px; /* Make checkbox larger */
+    height: 20px;
+    accent-color: red; /* Highlight checkbox */
+    cursor: pointer;
+}
+
+.custom-image-upload {
+    margin-top: 10px;
+    margin-left: 28px; /* Indent to align with checkbox text */
+    text-align: left;
+}
+
+.custom-image-upload input[type="file"] {
+    width: calc(100% - 10px); /* Adjust width */
+    padding: 8px;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+/* Style for file input button if possible (browser dependent) */
+.custom-image-upload input[type="file"]::-webkit-file-upload-button {
+  background: red;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.custom-image-upload input[type="file"]::-webkit-file-upload-button:hover {
+  background: #cc0000;
+}
+
+.custom-design-info {
+    font-size: 0.8em;
+    color: #aaa;
+    margin-top: 5px;
+    margin-left: 28px;
+}
+
+/* Add these to your existing media queries for responsiveness */
+@media (max-width: 768px) {
+    .custom-design-option {
+        font-size: 1.2em; /* Bigger on mobile */
+    }
+    .custom-design-option input[type="checkbox"] {
+        width: 30px;
+        height: 30px;
+    }
+    .custom-image-upload {
+        margin-left: 38px; /* Adjust indent */
+    }
+    .custom-image-upload input[type="file"] {
+        font-size: 1.1em;
+        padding: 12px;
+    }
+    .custom-image-upload input[type="file"]::-webkit-file-upload-button {
+      padding: 10px 15px;
+    }
+    .custom-design-info {
+        font-size: 0.9em;
+        margin-left: 38px;
+    }
+}
+/* Update your style.css with these changes */
+
+/* --- Product Grid - Product Image Display & Zoom --- */
+.product {
+    /* ... existing styles ... */
+    background-color: #111;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 0.8s ease-out;
+    overflow: hidden; /* Keep this to initially clip anything outside of the box */
+}
+.product:hover {
+    transform: scale(1.03); /* Slight lift for the whole product box */
+    box-shadow: 0 10px 25px rgba(255, 0, 0, 0.2);
+    /* Allow the zoomed image to overflow its container */
+    overflow: visible;
+}
+
+.product img {
+    width: 100%; /* Make image take full width of its container (product div's padding area) */
+    height: 200px; /* Give it a consistent height, adjust as needed */
+    object-fit: contain; /* Makes the whole image visible, no cropping, adds letterboxing if aspect ratio differs */
+    border-radius: 10px;
+    transition: transform 0.3s ease, z-index 0.3s ease, box-shadow 0.3s ease; /* Add box-shadow to transition */
+    position: relative; /* Needed for z-index to work */
+    z-index: 1; /* Default z-index */
+    box-shadow: none; /* No shadow by default */
+}
+
+.product:hover .product-img {
+    transform: scale(1.8); /* INCREASE ZOOM: Zoom in by 80% (original + 80%) */
+    z-index: 10; /* Bring zoomed image to the front, above neighbors */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Add a subtle shadow to the zoomed image */
+}
+
+/* Adjust responsive styles for images if necessary */
+@media (max-width: 768px) {
+    .product img {
+        height: 150px; /* Adjust height for smaller screens */
+    }
+    .product:hover .product-img {
+        transform: scale(1.4); /* A bit less zoom on mobile to avoid excessive overlap */
+    }
+}
