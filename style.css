@@ -1,0 +1,1309 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+@import url('https://fonts.cdnfonts.com/css/ethnocentric');
+
+
+/* --- IMPORTANT: REMOVE ANY PREVIOUS "CRITICAL DEBUGGING" CSS BLOCKS --- */
+/* Ensure you do NOT have any rules like:
+#settingsMenu, #basketMenu, #searchOverlay { display: none !important; pointer-events: none !important; ... }
+These were for debugging and will prevent your menus from working now.
+*/
+
+body {
+    margin: 0;
+    background-color: #DBC5AC; /* CHANGED: From black to DBC5AC */
+    color: #F9F5F1; /* CHANGED: From white to F9F5F1 */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden; /* Prevent horizontal scroll for animations */
+}
+
+/* Page Entry Animation */
+body.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+}
+body.fade-in.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+/* Top Icons */
+.top-icons {
+    position: fixed; /* Changed to fixed so they stay on top when scrolling */
+    top: 15px;
+    left: 30px;
+    right: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100; /* Higher z-index to be above everything else */
+    background: transparent; /* Ensure no background blocks content */
+}
+
+.icon {
+    height: 40px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+/* Settings Icon Rotation Animation */
+#settingsIcon.rotated {
+    transform: rotate(90deg);
+}
+#settingsIcon:hover {
+    transform: scale(1.1);
+}
+.fa-search, .fa-filter { /* Style for Font Awesome search and filter icons */
+    font-size: 30px;
+    color: #F9F5F1; /* CHANGED: From white to F9F5F1 */
+    margin: 0 15px; /* Adjust margin for search icon */
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.fa-search:hover { /* Only search icon has this hover now */
+    transform: scale(1.1);
+}
+
+.products-filter-icon { /* Specific style for filter icon next to product count */
+    margin-left: 15px; /* Pushed next to the count */
+    font-size: 30px;
+    color: #F9F5F1; /* CHANGED: From white to F9F5F1 */
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.products-filter-icon:hover {
+    transform: scale(1.1);
+}
+
+
+/* --- Settings & Basket Menu (Enhanced Design & Animations) --- */
+.menu, .basket-menu, .sub-menu-overlay { /* Apply base menu styles to new sub-menu overlays */
+    position: fixed;
+    top: 70px;
+    background-color: rgba(89, 50, 46, 0.95); /* CHANGED: From rgba(25,25,25,0.95) to new accent color */
+    color: #F9F5F1; /* CHANGED: From white to F9F5F1 */
+    border-radius: 15px;
+    padding: 20px;
+    width: 280px;
+    display: none;
+    opacity: 0;
+    transform: translateY(-20px);
+    box-shadow: 0 5px 25px rgba(89, 50, 46, 0.4); /* CHANGED: Red glowing shadow to new accent color */
+    z-index: 90;
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.menu.is-visible, .basket-menu.is-visible, .sub-menu-overlay.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    display: block;
+}
+
+.menu { left: 30px; width: 220px; } /* Adjust width for main settings menu */
+.basket-menu { right: 30px; }
+
+/* New sub-menu overlays specific positioning */
+.sub-menu-overlay {
+    left: 30px;
+    width: 220px;
+    z-index: 91;
+    transform: translateX(100%);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.6); /* Keep a slightly darker shadow */
+}
+.sub-menu-overlay.is-visible {
+    transform: translateX(0);
+}
+
+
+.menu ul, .sub-menu-overlay ul { /* Apply to all menu lists */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.menu li, .sub-menu-overlay li { /* Apply to all menu list items */
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(249, 245, 241, 0.1); /* CHANGED: White border to new text color */
+    transform: translateX(-20px);
+    opacity: 0;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+/* Animate list items in after menu is visible */
+.menu.is-visible li, .sub-menu-overlay.is-visible li {
+    transform: translateX(0);
+    opacity: 1;
+}
+/* Staggered animation for menu items */
+.menu.is-visible li:nth-child(1), .sub-menu-overlay.is-visible li:nth-child(1) { transition-delay: 0.1s; }
+.menu.is-visible li:nth-child(2), .sub-menu-overlay.is-visible li:nth-child(2) { transition-delay: 0.15s; }
+.menu.is-visible li:nth-child(3), .sub-menu-overlay.is-visible li:nth-child(3) { transition-delay: 0.2s; }
+.menu.is-visible li:nth-child(4), .sub-menu-overlay.is-visible li:nth-child(4) { transition-delay: 0.25s; }
+.menu.is-visible li:nth-child(5), .sub-menu-overlay.is-visible li:nth-child(5) { transition-delay: 0.3s; }
+.menu.is-visible li:nth-child(6), .sub-menu-overlay.is-visible li:nth-child(6) { transition-delay: 0.35s; }
+
+
+.menu li:last-child, .sub-menu-overlay li:last-child { border-bottom: none; }
+.menu a, .sub-menu-overlay a { /* Apply to all menu links */
+    color: #F9F5F1; /* CHANGED: From white to F9F5F1 */
+    text-decoration: none;
+    display: block;
+    font-size: 1.1em;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1px;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+.menu a:hover, .sub-menu-overlay a:hover {
+    color: #59322E; /* CHANGED: Red to new accent color */
+    transform: translateX(8px);
+}
+
+.submenu-arrow {
+    float: right;
+    font-size: 0.8em;
+    color: #F9F5F1; /* CHANGED: From #aaa to F9F5F1 */
+    margin-left: 5px;
+    line-height: inherit;
+}
+.sub-menu-header {
+    color: #F9F5F1; /* CHANGED: From #ddd to F9F5F1 */
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1em;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(249, 245, 241, 0.2); /* CHANGED: White to new text color */
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+.sub-menu-header:hover {
+    color: #59322E; /* CHANGED: Red to new accent color */
+}
+.sub-menu-header .submenu-arrow {
+    float: left;
+    margin-right: 10px;
+}
+
+
+/* Basket Menu (inherited from .menu, but specific styles below) */
+.basket-items {
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+/* Custom Scrollbar for basket-items */
+.basket-items::-webkit-scrollbar {
+    width: 8px;
+}
+.basket-items::-webkit-scrollbar-track {
+    background: #DBC5AC; /* CHANGED: From #f1f1f1 to new background */
+    border-radius: 10px;
+}
+.basket-items::-webkit-scrollbar-thumb {
+    background: #59322E; /* CHANGED: From #888 to new accent color */
+    border-radius: 10px;
+}
+.basket-items::-webkit-scrollbar-thumb:hover {
+    background: #7a4641; /* Slightly lighter accent on hover */
+}
+
+.total-price {
+    font-weight: bold;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(249, 245, 241, 0.1); /* CHANGED: White to new text color */
+    color: #59322E; /* CHANGED: Red to new accent color */
+    font-size: 1.2em;
+}
+.checkout-btn {
+    background-color: #59322E; /* CHANGED: Red to new accent color */
+    color: #F9F5F1; /* CHANGED: White to F9F5F1 */
+    border: none;
+    padding: 12px;
+    width: 100%;
+    margin-top: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1px;
+}
+.checkout-btn:hover {
+    background-color: #7a4641; /* CHANGED: Darker red to slightly lighter accent */
+    transform: scale(1.02);
+}
+
+/* Logo Banner - Added Background Image */
+.logo-banner {
+    background-color: #DBC5AC; /* CHANGED: From #f5f5dc to new background */
+    text-align: center;
+    padding: 30px 0;
+    background-image: url('images/logo_background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    z-index: 1;
+    padding-top: 100px;
+}
+.logo {
+    height: 120px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Functionality Warning Message (Text-Only, Styled) */
+.warning-message {
+    background-color: transparent;
+    color: #D50000; /* CHANGED: From #fbc02d (orange) to D50000 (specific red) */
+    border: none;
+    padding: 15px 20px;
+    margin: 20px auto;
+    text-align: center;
+    max-width: 700px;
+    font-family: 'Ethnocentric', sans-serif;
+    font-size: 1.1em;
+    font-weight: 300;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    box-shadow: none;
+    display: block;
+    z-index: 50;
+    position: relative;
+    opacity: 0.9;
+}
+
+.warning-message p {
+    margin-bottom: 0;
+    color: inherit;
+}
+
+
+/* Slogan */
+.slogan {
+    text-align: center;
+    margin: 50px 0 20px;
+}
+.slogan h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    margin: 10px 0;
+    color: #F9F5F1; /* CHANGED: Added for clarity */
+    animation: slideInFromTop 1s ease-out;
+}
+.sub-slogan {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    color: #F9F5F1; /* CHANGED: From #ccc to F9F5F1 */
+    margin-bottom: 30px;
+    animation: fadeIn 1.5s ease-out;
+}
+.shop-button {
+    background-color: transparent;
+    color: #F9F5F1; /* CHANGED: White to F9F5F1 */
+    padding: 12px 36px;
+    font-size: 18px;
+    font-family: 'Ethnocentric', sans-serif; /* Already Ethnocentric */
+    text-decoration: none;
+    border: 1px solid #F9F5F1; /* CHANGED: White to F9F5F1 */
+    border-radius: 0;
+    letter-spacing: 1px;
+    font-weight: 300;
+    text-transform: uppercase;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+.shop-button:hover {
+    background-color: rgba(249, 245, 241, 0.1); /* CHANGED: rgba(255,255,255,0.1) to new text color */
+    color: #F9F5F1; /* CHANGED: White to F9F5F1 */
+    transform: scale(1.05);
+}
+
+/* Product Carousel */
+.carousel-container {
+    position: relative;
+    width: 80%;
+    max-width: 800px;
+    margin: 40px auto;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 2s ease-out;
+}
+
+.carousel-slide {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border-radius: 15px;
+}
+
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #F9F5F1; /* CHANGED: White to F9F5F1 */
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 24px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+.carousel-nav:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+.carousel-nav.prev {
+    left: 10px;
+}
+.carousel-nav.next {
+    right: 10px;
+}
+
+
+/* Search Overlay */
+.search-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 110; /* Highest z-index for full overlay */
+    display: flex; /* Flexbox for centering */
+    flex-direction: column;
+    align-items: center;
+    padding-top: 100px;
+    box-sizing: border-box;
+    /* Opacity and transform handled by .is-visible and toggleMenuWithAnimation */
+    opacity: 0;
+    pointer-events: none; /* Prevents clicks when hidden */
+    transition: opacity 0.3s ease-out;
+}
+.search-overlay.is-visible {
+    opacity: 1;
+    pointer-events: auto; /* Allow clicks when visible */
+}
+
+
+.search-box {
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+}
+#searchInput {
+    width: 100%;
+    padding: 15px 50px 15px 20px;
+    font-size: 20px;
+    border: 2px solid #59322E; /* CHANGED: #ccc to new accent color */
+    border-radius: 30px;
+    background-color: #444; /* Keep a dark background for input */
+    color: #F9F5F1; /* CHANGED: White to new text color */
+    outline: none;
+    box-sizing: border-box;
+}
+#searchInput::placeholder {
+    color: #F9F5F1; /* CHANGED: #aaa to new text color */
+    opacity: 0.7;
+}
+#searchInput:focus {
+    border-color: #59322E; /* CHANGED: Red to new accent color */
+}
+#searchCloseBtn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #F9F5F1; /* CHANGED: #ccc to new text color */
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+#searchCloseBtn:hover {
+    color: #59322E; /* CHANGED: Red to new accent color */
+}
+
+.search-results {
+    width: 90%;
+    max-width: 600px;
+    background-color: #222;
+    border-radius: 10px;
+    margin-top: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 10px 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+.search-results p.search-tip {
+    color: #F9F5F1; /* CHANGED: #aaa to new text color */
+    opacity: 0.8;
+    text-align: center;
+    padding: 20px;
+}
+.search-result-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #F9F5F1; /* CHANGED: White to new text color */
+    border-bottom: 1px solid #444; /* Keep dark border for separation */
+    transition: background-color 0.2s ease;
+}
+.search-result-item:last-child {
+    border-bottom: none;
+}
+.search-result-item:hover {
+    background-color: #333;
+}
+.search-result-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 15px;
+}
+.search-result-item div {
+    flex-grow: 1;
+}
+.search-result-name {
+    margin: 0;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+.search-result-category {
+    margin: 0;
+    font-size: 0.9em;
+    color: #F9F5F1; /* CHANGED: #aaa to new text color */
+    opacity: 0.7;
+}
+
+/* Product Grid */
+.products-page-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 20px auto 0 auto;
+    padding: 0 40px;
+    color: #F9F5F1; /* CHANGED: #ddd to new text color */
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2em;
+    letter-spacing: 1px;
+    padding-top: 100px;
+}
+.product-count {
+    flex-grow: 1;
+    text-align: left;
+}
+.products-container {
+    display: grid;
+    gap: 25px;
+    padding: 40px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.product {
+    background-color: #B27555; /* CHANGED: From #2a2a2a to new product card color */
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 0.8s ease-out;
+    overflow: visible;
+}
+.product:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 25px rgba(89, 50, 46, 0.4);
+    overflow: visible;
+}
+
+.product img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    border-radius: 10px;
+    transition: transform 0.3s ease, z-index 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    z-index: 1;
+    box-shadow: none;
+}
+
+/* Change 4: Make the zoom on posters less */
+.products-container .product:hover .product-img { /* Target images within product containers */
+    transform: scale(1.2); /* Reduced from 1.8 to 1.2 for less zoom */
+    z-index: 10;
+    box-shadow: 0 5px 15px rgba(89, 50, 46, 0.6);
+}
+
+/* Options & Button */
+.product-name {
+    font-size: 24px;
+    margin: 15px 0 10px;
+    font-family: 'Orbitron', sans-serif;
+    border-bottom: 2px solid #59322E; /* CHANGED: Red to new accent color */
+    padding-bottom: 8px;
+    word-wrap: break-word;
+}
+.price, .quantity-label, .size-label { /* Added .size-label */
+    margin-top: 10px;
+    display: block;
+    font-size: 18px;
+    font-family: 'Bebas Neue', sans-serif;
+    color: #F9F5F1; /* CHANGED: #ddd to new text color */
+}
+/* Styles for Poster Pack specific price/details */
+.pack-price {
+    margin-top: 10px;
+    display: block;
+    font-size: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    color: #F9F5F1;
+    font-weight: bold;
+}
+.pack-details {
+    font-size: 0.9em;
+    color: #ccc;
+    margin-bottom: 10px;
+}
+.pack-details span {
+    display: block;
+}
+
+select, input[type="number"] {
+    margin-top: 5px;
+    padding: 8px;
+    width: calc(100% - 16px);
+    border: 1px solid #F9F5F1; /* CHANGED: White to new text color */
+    background-color: #444;
+    color: #F9F5F1; /* CHANGED: White to new text color */
+    font-size: 16px;
+    border-radius: 5px;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23F9F5F1%22%20d%3D%22M287%20165.7L154.7%2033.4c-6.8-6.8-17.6-6.8-24.4%200l-132.3%20132.3c-6.8%206.8-6.8%2017.6%200%2024.4l24.4%2024.4c6.8%206.8%2017.6%206.8%2024.4%200l90.3-90.3L238.2%20214.5c6.8%206.8%2017.6%206.8%2024.4%200l24.4-24.4c6.8-6.8%206.8-17.6%200-24.4z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 8px top 50%;
+    background-size: 12px auto;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.add-btn, .select-design-btn, .select-btn { /* Combined styles for new buttons */
+    margin-top: 15px;
+    border: 2px solid #59322E; /* CHANGED: Red to new accent color */
+    color: #F9F5F1; /* CHANGED: White to new text color */
+    background-color: transparent;
+    padding: 12px;
+    width: 100%;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: all 0.2s ease;
+    border-radius: 5px;
+}
+.add-btn:hover:not(:disabled), .select-design-btn:hover:not(:disabled), .select-btn:hover:not(:disabled) { /* Added :not(:disabled) */
+    background-color: #59322E; /* CHANGED: Red to new accent color */
+    color: #F9F5F1; /* CHANGED: White to new text color */
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(89, 50, 46, 0.4);
+}
+.add-btn:disabled, .select-design-btn:disabled, .select-btn:disabled { /* Disabled state for buttons */
+    border-color: #777;
+    color: #aaa;
+    background-color: #444;
+    cursor: not-allowed;
+}
+
+/* Footer */
+.feature-highlight, .footer-description, .since {
+    text-align: center;
+    font-size: 22px;
+    color: #F9F5F1; /* CHANGED: #ddd to new text color */
+    margin-top: 40px;
+    animation: fadeIn 1.5s ease-out;
+}
+.social-icons {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.social-icons img {
+    height: 38px;
+    margin: 0 10px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+.social-icons img:hover {
+    filter: drop-shadow(0 0 8px #59322E); /* CHANGED: Red to new accent color */
+    transform: scale(1.2);
+}
+
+/* Basket Item Layout */
+.basket-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(249, 245, 241, 0.1); /* CHANGED: #eee to new text color */
+    padding-bottom: 12px;
+}
+.basket-item:last-child {
+    border-bottom: none;
+}
+.basket-img {
+    height: 60px;
+    width: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 12px;
+}
+.basket-item-details {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+.basket-item-name {
+    margin: 0;
+    font-weight: bold;
+    font-size: 1em;
+}
+.basket-item-price {
+    margin: 0;
+    font-size: 0.9em;
+    color: #bbb; /* Keep slightly darker for secondary info */
+}
+.remove-btn {
+    background-color: #59322E; /* CHANGED: #cc0000 to new accent color */
+    color: #F9F5F1; /* CHANGED: White to new text color */
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 10px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.remove-btn:hover {
+    background-color: #7a4641; /* CHANGED: Red to slightly lighter accent */
+    transform: scale(1.05);
+}
+
+
+/* Custom Design Option (Framed Posters specific) */
+.custom-design-option {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    text-align: left;
+    color: #F9F5F1;
+    display: block;
+    padding: 5px 0;
+    border-top: 1px dashed rgba(249, 245, 241, 0.1);
+    padding-top: 10px;
+}
+
+.custom-design-option label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1em;
+    letter-spacing: 0.5px;
+}
+
+.custom-design-option input[type="checkbox"] {
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    accent-color: #59322E;
+    cursor: pointer;
+}
+
+.custom-image-upload {
+    margin-top: 10px;
+    margin-left: 28px;
+    text-align: left;
+}
+
+.custom-image-upload input[type="file"] {
+    width: calc(100% - 10px);
+    padding: 8px;
+    background-color: #444;
+    color: #F9F5F1;
+    border: 1px solid #777;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+.custom-image-upload input[type="file"]::-webkit-file-upload-button {
+  background: #59322E;
+  color: #F9F5F1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.custom-image-upload input[type="file"]::-webkit-file-upload-button:hover {
+  background: #7a4641;
+}
+
+.custom-design-info {
+    font-size: 0.8em;
+    color: #bbb;
+    margin-top: 5px;
+    margin-left: 28px;
+}
+
+
+/* --- Filter Overlay Styles --- */
+.filter-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 320px;
+    height: 100%;
+    background-color: rgba(89, 50, 46, 0.98); /* CHANGED: Dark grey to new accent color */
+    z-index: 95;
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+    overflow-y: auto;
+}
+
+.filter-overlay.is-visible {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(249, 245, 241, 0.1);
+}
+.filter-header h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8em;
+    color: #59322E; /* CHANGED: Red to new accent color */
+    margin: 0;
+}
+.filter-close-btn {
+    background: none;
+    border: none;
+    color: #F9F5F1; /* CHANGED: White to new text color */
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+.filter-close-btn:hover {
+    color: #59322E; /* CHANGED: Red to new accent color */
+}
+
+.filter-section {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed rgba(249, 245, 241, 0.05);
+}
+.filter-section:last-child {
+    border-bottom: none;
+}
+.filter-section h4 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1em;
+    color: #F9F5F1; /* CHANGED: #ddd to new text color */
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+/* Filter Checkboxes/Radio Buttons */
+.filter-option {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 0.95em;
+    color: #bbb;
+}
+.filter-option input[type="checkbox"],
+.filter-option input[type="radio"] {
+    margin-right: 10px;
+    accent-color: #59322E; /* CHANGED: Red to new accent color */
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+}
+/* Price Range Slider */
+.price-range-slider {
+    width: 100%;
+    margin-top: 10px;
+}
+.price-range-output {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+    color: #F9F5F1; /* CHANGED: #ccc to new text color */
+    margin-top: 5px;
+}
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    background: #777;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    border-radius: 5px;
+}
+input[type="range"]:hover {
+    opacity: 1;
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #59322E; /* CHANGED: Red to new accent color */
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(89, 50, 46, 0.6);
+}
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #59322E; /* CHANGED: Red to new accent color */
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(89, 50, 46, 0.6);
+}
+
+/* Filter Action Buttons */
+.filter-actions {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.filter-btn {
+    background-color: #59322E; /* CHANGED: Red to new accent color */
+    color: #F9F5F1; /* CHANGED: White to new text color */
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.filter-btn:hover {
+    background-color: #7a4641; /* CHANGED: Darker red to slightly lighter accent */
+    transform: translateY(-2px);
+}
+.filter-clear-btn {
+    background-color: #777; /* Keep a neutral dark grey for clear button */
+}
+.filter-clear-btn:hover {
+    background-color: #999; /* Lighter grey on hover */
+}
+
+/* Global Notification Styles */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+
+.notification {
+    background-color: rgba(89, 50, 46, 0.95); /* CHANGED: Dark grey to new accent color */
+    color: #F9F5F1; /* CHANGED: White to new text color */
+    padding: 15px 25px;
+    border-radius: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1em;
+    letter-spacing: 0.5px;
+    box-shadow: 0 6px 15px rgba(89, 50, 46, 0.4); /* CHANGED: Dark shadow to new accent color */
+    opacity: 0;
+    transform: translateX(120%);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    pointer-events: auto;
+    min-width: 220px;
+    text-align: center;
+}
+
+.notification.success {
+    background-color: rgba(76, 175, 80, 0.95); /* Keep green for success, or adjust if new palette has a "success green" */
+    box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+}
+
+.notification.warning {
+    background-color: #D50000; /* CHANGED: Orange to a specific red for warning */
+    color: #F9F5F1; /* CHANGED: Dark text to new text color for contrast */
+    box-shadow: 0 6px 15px rgba(213, 0, 0, 0.4); /* CHANGED: Red shadow to new red */
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notification.hide {
+    opacity: 0;
+    transform: translateX(120%);
+}
+
+/* --- Poster Selection Page Specific Styles --- */
+.selection-header {
+    text-align: center;
+    margin: 80px auto 20px auto;
+    max-width: 800px;
+    padding: 0 20px;
+    color: #F9F5F1;
+}
+.selection-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5em;
+    color: #59322E; /* Accent color */
+    margin-bottom: 10px;
+}
+.selection-info {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+.selection-info strong {
+    color: red; /* Highlight required count */
+}
+.selection-progress {
+    background-color: #444;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 25px;
+    margin-top: 15px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+}
+.selection-progress-bar {
+    height: 100%;
+    width: 0%; /* Initial width, controlled by JS */
+    background-color: #59322E; /* Accent color */
+    transition: width 0.3s ease-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 0.9em;
+    font-family: 'Orbitron', sans-serif;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+/* New style for the selection tip text */
+.selection-tip {
+    font-size: 0.9em; /* Smaller than general info, similar to original request */
+    color: #231c16; /* Requested color */
+    font-family: 'Ethnocentric', sans-serif; /* Requested font */
+    margin-top: 5px;
+    font-weight: 300; /* Matching shop-button */
+    text-transform: uppercase; /* Matching shop-button */
+    letter-spacing: 0.5px; /* Adjust as needed */
+}
+
+
+.product.selected { /* Highlight selected individual posters */
+    border: 4px solid #59322E; /* Accent color border */
+    box-shadow: 0 0 20px rgba(89, 50, 46, 0.8);
+    transform: scale(1.02);
+}
+
+/* Checkmark overlay for selected posters */
+.checkmark-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(89, 50, 46, 0.7); /* Semi-transparent accent color */
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none; /* Allows clicks to pass through to underlying elements */
+    transition: opacity 0.3s ease-out;
+    z-index: 5;
+}
+.product.selected .checkmark-overlay {
+    opacity: 1;
+}
+.checkmark-overlay i {
+    color: #F9F5F1;
+    font-size: 3em;
+    text-shadow: 0 0 10px rgba(0,0,0,0.8);
+}
+
+/* Fixed Add to Basket button for the pack */
+.add-pack-to-basket-container {
+    position: sticky; /* or fixed, depending on desired behavior */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(89, 50, 46, 0.95);
+    padding: 15px 20px;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+    text-align: center;
+    z-index: 90; /* Below menus, above content */
+}
+.add-pack-to-basket-btn {
+    background-color: #59322E;
+    color: #F9F5F1;
+    border: none;
+    padding: 15px 30px;
+    width: calc(100% - 40px); /* Account for padding */
+    max-width: 400px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.3em;
+    font-weight: bold;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1px;
+}
+.add-pack-to-basket-btn:hover:not(:disabled) {
+    background-color: #7a4641;
+    transform: scale(1.01);
+}
+.add-pack-to-basket-btn:disabled {
+    background-color: #444;
+    color: #777;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Hide product type filter on selection page (already exists, ensuring it remains) */
+.filter-section.product-type-filter {
+    display: none;
+}
+
+
+/* General Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInFromTop {
+    from { opacity: 0; transform: translateY(-50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .top-icons {
+        left: 15px;
+        right: 15px;
+        top: 10px;
+    }
+    .icon {
+        height: 50px;
+    }
+    .fa-search, .fa-filter {
+        font-size: 35px;
+    }
+
+    .menu { left: 15px; width: 180px; top: 60px; }
+    .basket-menu { right: 15px; width: 280px; top: 60px; }
+
+    .logo {
+        height: 150px;
+    }
+    .logo-banner {
+        padding-top: 80px;
+    }
+
+    .slogan h1 {
+        font-size: 48px;
+    }
+    .sub-slogan {
+        font-size: 20px;
+    }
+    .shop-button {
+        padding: 10px 25px;
+        font-size: 16px;
+    }
+
+    .carousel-container {
+        width: 95%;
+        margin: 20px auto;
+    }
+    .carousel-slide img {
+        height: 250px;
+    }
+
+    .feature-highlight, .footer-description, .since {
+        font-size: 18px;
+        margin-top: 25px;
+    }
+    .social-icons img {
+        height: 32px;
+    }
+
+    /* Product Page Controls & Grid for Mobile */
+    .products-page-controls {
+        padding: 0 15px;
+        font-size: 1em;
+        padding-top: 80px;
+        /* Ensure filter icon stays next to count */
+        justify-content: flex-start; /* Align to start */
+        align-items: center;
+    }
+    .products-filter-icon {
+        margin-left: auto; /* Pushes filter icon to the right if space allows, or keeps it close to count */
+    }
+    .products-container {
+        padding: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        padding-top: 0;
+    }
+
+    .product-name {
+        font-size: 20px;
+    }
+    .price, .quantity-label, .size-label, .pack-price { /* Adjusted for pack elements */
+        font-size: 16px;
+    }
+    select, input[type="number"] {
+        font-size: 14px;
+        padding: 6px;
+    }
+    .add-btn, .select-design-btn, .select-btn {
+        padding: 10px;
+        font-size: 1em;
+    }
+
+    .search-box {
+        width: 95%;
+    }
+    #searchInput {
+        font-size: 18px;
+        padding: 12px 45px 12px 15px;
+    }
+    #searchCloseBtn {
+        font-size: 20px;
+    }
+    .search-result-item {
+        padding: 8px 15px;
+    }
+    .search-result-item img {
+        width: 50px;
+        height: 50px;
+    }
+    .warning-message {
+        font-size: 0.9em;
+        padding: 10px 15px;
+    }
+
+    /* Filter Overlay for Mobile */
+    .filter-overlay {
+        width: 100%;
+    }
+    .notification-container {
+        top: 15px;
+        right: 15px;
+        left: 15px;
+        width: auto;
+        align-items: center;
+    }
+    .notification {
+        font-size: 0.9em;
+        padding: 10px 15px;
+        min-width: unset;
+        width: 100%;
+    }
+
+    /* Poster Selection Page Mobile Adjustments */
+    .selection-header {
+        margin-top: 60px;
+        padding: 0 15px;
+    }
+    .selection-header h2 {
+        font-size: 2.5em;
+    }
+    .selection-info {
+        font-size: 1em;
+    }
+    .products-container {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+    .add-pack-to-basket-btn {
+        font-size: 1.1em;
+        padding: 12px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .icon {
+        height: 40px;
+    }
+    .fa-search, .fa-filter {
+        font-size: 30px;
+    }
+    .menu, .basket-menu {
+        width: calc(100% - 30px);
+        left: 15px;
+        right: 15px;
+        top: 55px;
+    }
+    .carousel-slide img {
+        height: 180px;
+    }
+    .products-container {
+        grid-template-columns: 1fr;
+        padding: 15px;
+    }
+    .slogan h1 {
+        font-size: 38px;
+    }
+    .sub-slogan {
+        font-size: 18px;
+    }
+    .products-page-controls {
+        padding-top: 70px;
+    }
+    /* Poster Selection Page Mobile Adjustments */
+    .selection-header h2 {
+        font-size: 2em;
+    }
+}

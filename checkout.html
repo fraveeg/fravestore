@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Frave Checkout</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lobster&family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/ethnocentric" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Specific styles for checkout page - These are embedded for simplicity,
+           but ideally some could go into style.css if generic */
+        .checkout-page-container {
+            max-width: 800px;
+            margin: 80px auto 50px auto; /* Adjust top margin for fixed header */
+            padding: 30px;
+            background-color: #59322E; /* Changed from #1a1a1a to accent color */
+            border-radius: 15px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
+            animation: fadeIn 1s ease-out;
+        }
+
+        .checkout-page-container h2 {
+            text-align: center;
+            color: #F9F5F1; /* Changed from red to main text color */
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3em;
+            margin-bottom: 30px;
+        }
+
+        .order-summary {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #7A4641; /* Changed from #2a2a2a to a complementary brown */
+            border-radius: 10px;
+        }
+
+        .order-summary h3 {
+            color: #F9F5F1; /* Changed from #ddd to main text color */
+            font-family: 'Orbitron', sans-serif;
+            border-bottom: 1px solid #B27555; /* Changed from #444 to a lighter brown */
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .checkout-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #B27555; /* Changed from #3a3a3a to a lighter brown */
+        }
+        .checkout-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .checkout-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .checkout-item-details {
+            flex-grow: 1;
+        }
+
+        .checkout-item-details p {
+            margin: 0;
+            font-size: 1.1em;
+        }
+        .checkout-item-details .item-name {
+            font-weight: bold;
+            color: #F9F5F1; /* Changed from #fff to main text color */
+        }
+        .checkout-item-details .item-qty-price {
+            color: #ccc; /* Kept similar to #aaa for secondary text */
+            font-size: 0.9em;
+        }
+        .checkout-subtotal, .checkout-shipping, .checkout-total {
+            text-align: right;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #F9F5F1; /* Changed from #fff to main text color */
+            margin-top: 10px;
+            font-family: 'Orbitron', sans-serif;
+        }
+        .checkout-total {
+            font-size: 1.5em;
+            color: #D50000; /* Changed from red to specific red */
+            border-top: 1px dashed #B27555; /* Changed from #444 to lighter brown */
+            padding-top: 10px;
+        }
+
+        .shipping-form {
+            padding: 20px;
+            background-color: #7A4641; /* Changed from #2a2a2a to a complementary brown */
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        .shipping-form h3 {
+            color: #F9F5F1; /* Changed from #ddd to main text color */
+            font-family: 'Orbitron', sans-serif;
+            border-bottom: 1px solid #B27555; /* Changed from #444 to lighter brown */
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .shipping-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #F9F5F1; /* Changed from #ccc to main text color */
+        }
+
+        .shipping-form input[type="text"],
+        .shipping-form input[type="email"],
+        .shipping-form input[type="tel"],
+        .shipping-form select,
+        .shipping-form textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #B27555; /* Changed from #444 to lighter brown */
+            border-radius: 5px;
+            background-color: #444; /* Keep dark for input backgrounds */
+            color: #F9F5F1; /* Changed from #fff to main text color */
+            font-size: 1em;
+        }
+        .shipping-form textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .shipping-form input[type="text"]:focus,
+        .shipping-form input[type="email"]:focus,
+        .shipping-form input[type="tel"]:focus,
+        .shipping-form select:focus,
+        .shipping-form textarea:focus {
+            outline: none;
+            border-color: #D50000; /* Changed from red to specific red */
+            box-shadow: 0 0 5px rgba(213, 0, 0, 0.5); /* Changed red to specific red */
+        }
+
+        .shipping-form select {
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23F9F5F1%22%20d%3D%22M287%20165.7L154.7%2033.4c-6.8-6.8-17.6-6.8-24.4%200l-132.3%20132.3c-6.8%206.8-6.8%2017.6%200%2024.4l24.4%2024.4c6.8%206.8%2017.6%206.8%2024.4%200l90.3-90.3L238.2%20214.5c6.8%206.8%2017.6%206.8%2024.4%200l24.4-24.4c6.8-6.8%206.8-17.6%200-24.4z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 8px top 50%;
+            background-size: 12px auto;
+        }
+
+        .place-order-btn {
+            background-color: #D50000; /* Changed from red to specific red */
+            color: #F9F5F1; /* Changed from white to main text color */
+            border: none;
+            padding: 15px 30px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        .place-order-btn:hover {
+            background-color: #E53935; /* Slightly lighter red on hover */
+            transform: scale(1.01);
+        }
+
+        @media (max-width: 768px) {
+            .checkout-page-container {
+                margin: 60px 15px 30px 15px;
+                padding: 20px;
+            }
+            .checkout-page-container h2 {
+                font-size: 2.2em;
+            }
+            .checkout-item {
+                flex-direction: column;
+                align-items: flex-start;
+                text-align: left;
+            }
+            .checkout-item img {
+                width: 60px;
+                height: 60px;
+                margin-bottom: 10px;
+            }
+            .shipping-form input[type="text"],
+            .shipping-form input[type="email"],
+            .shipping-form input[type="tel"],
+            .shipping-form select,
+            .shipping-form textarea {
+                width: calc(100% - 20px);
+            }
+            .place-order-btn {
+                font-size: 1.1em;
+                padding: 12px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <audio id="backgroundMusic" loop autoplay>
+        <source src="sounds/background-music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div class="top-icons">
+        <img src="images/settings.png" alt="Settings" class="icon" id="settingsIcon">
+        <i class="fas fa-search icon" id="searchIcon"></i>
+        <img src="images/basket.png" alt="Basket" class="icon" id="basketIcon">
+    </div>
+
+    <div class="menu" id="settingsMenu">
+        <ul>
+            <li><a href="#" class="category-link">Category</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <ul class="submenu" id="categorySubMenu">
+            <li id="framedPostersCategoryLink"><a href="#">Framed Posters <i class="fas fa-chevron-right submenu-arrow"></i></a></li>
+            <li id="postersCategoryLink"><a href="#">Poster Packs <i class="fas fa-chevron-right submenu-arrow"></i></a></li>
+            <li><a href="stickers.html">Stickers</a></li>
+        </ul>
+    </div>
+
+    <div class="menu sub-menu-overlay" id="framedPostersSubMenu">
+        <ul>
+            <li class="sub-menu-header" id="backToCategoryMenuFramed"><i class="fas fa-chevron-left submenu-arrow"></i> Framed Posters</li>
+            <li><a href="shop.html?sub=Movies%20%26%20Series">Movies & Series</a></li>
+            <li><a href="shop.html?sub=Cars">Cars</a></li>
+            <li><a href="shop.html?sub=Musicians">Musicians</a></li>
+            <li><a href="shop.html?sub=Quotes">Football</a></li>
+            <li><a href="shop.html?sub=Other">Quotes & Other</a></li>
+            <li><a href="shop.html?sub=Custom">Custom Designs</a></li>
+        </ul>
+    </div>
+
+    <div class="menu sub-menu-overlay" id="postersSubMenu">
+        <ul>
+            <li class="sub-menu-header" id="backToCategoryMenuPosters"><i class="fas fa-chevron-left submenu-arrow"></i> Poster Packs</li>
+            <li><a href="poster_packs.html">All Packs</a></li>
+        </ul>
+    </div>
+
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search products..." autofocus>
+            <button id="searchCloseBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="search-results" id="searchResults"></div>
+    </div>
+
+    <div class="basket-menu" id="basketMenu">
+        <div class="basket-items" id="basketItems">
+            <p>Your basket is empty.</p>
+        </div>
+        <div class="total-price" id="totalPrice">Total: 0 L.E</div>
+        <button class="checkout-btn" id="checkoutBtn">Checkout</button>
+    </div>
+
+    <div class="logo-banner">
+        <img src="images/logo.png" alt="Logo" class="logo" />
+    </div>
+
+    <div class="checkout-page-container">
+        <h2>Checkout</h2>
+
+        <div class="order-summary">
+            <h3>Your Order</h3>
+            <div id="checkoutOrderItems">
+                </div>
+            <div class="checkout-subtotal" id="checkoutSubtotal"></div>
+            <div class="checkout-shipping" id="checkoutShipping"></div>
+            <div class="checkout-total" id="finalTotal"></div>
+        </div>
+
+        <form class="shipping-form" id="checkoutForm" action="https://formspree.io/f/xpwryvlg" method="POST">
+            <h3>Shipping Information</h3>
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" name="Full Name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="Email" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="Phone Number" required>
+
+            <label for="city">City:</label>
+            <select id="city" name="City" required>
+                <option value="">Select your city</option>
+                <option value="Cairo">Cairo</option>
+                <option value="Alexandria">Alexandria</option>
+                <option value="Other Regions">Other Regions</option>
+            </select>
+
+            <label for="buildingNo">Building Number:</label>
+            <input type="text" id="buildingNo" name="Building Number" required>
+
+            <label for="floorNo">Floor Number:</label>
+            <input type="text" id="floorNo" name="Floor Number" required>
+
+            <label for="apartmentNo">Apartment Number:</label>
+            <input type="text" id="apartmentNo" name="Apartment Number" required>
+
+            <label for="landmark">Nearest Landmark (Optional):</label>
+            <input type="text" id="landmark" name="Nearest Landmark">
+
+            <label for="address">Street Address (Required):</label>
+            <textarea id="address" name="Street Address" rows="4" required></textarea>
+
+            <button type="submit" class="place-order-btn">Place Order</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="checkout.js"></script>
+</body>
+</html>
