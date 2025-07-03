@@ -1,4 +1,4 @@
-// poster_selection.js - Handles the selection of individual posters for a pack (with custom product on top and corrected filters)
+// poster_selection.js - Handles the selection of individual posters for a pack (allowing multiple selections of same design)
 document.addEventListener('DOMContentLoaded', () => {
     console.log("poster_selection.js: DOMContentLoaded fired. Initializing poster selection page.");
 
@@ -16,14 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Individual poster data - These are the designs available for selection
-    // This must be the SAME product data that was previously in posters.js
     const allIndividualPosters = [
-        // It's crucial that if you have a "Custom" individual poster design
-        // that you intend to show on this page, it should be marked with isCustomizable: true.
-        // For example:
-        { id: 'p_custom_ind_design', name: "YOUR CUSTOM DESIGN", image: "images/poster_custom.jpg", category: "Poster", subcategory: "Custom", price: 100, isCustomizable: true }, // Added a placeholder for custom individual poster
+        // Include a placeholder for a custom individual poster design if you offer one for selection in packs.
+        { id: 'p_custom_ind_design', name: "YOUR CUSTOM DESIGN", image: "images/poster_custom.jpg", category: "Poster", subcategory: "Custom", price: 100, isCustomizable: true },
 
-        // Posters (original set from posters.js, excluding custom from here if it's separate)
+        // Existing individual poster designs:
         { id: 'p1', name: "Pulp Fiction", image: "images/PM1.jpg", category: "Poster", subcategory: "Movies & Series", price: 100 },
         { id: 'p2', name: "Fight Club1", image: "images/PM2.jpg", category: "Poster", subcategory: "Movies & Series", price: 100 },
         { id: 'p4', name: "Fight Club2", image: "images/PM3.jpg", category: "Poster", subcategory: "Movies & Series", price: 100 },
@@ -291,20 +288,26 @@ document.addEventListener('DOMContentLoaded', () => {
         postersToRender.forEach((poster) => {
             const productDiv = document.createElement('div');
             productDiv.className = 'product';
-            // Add 'selected' class if this poster is already in selectedDesigns
-            const isSelected = selectedDesigns.some(design => design.id === poster.id);
-            if (isSelected) {
+
+            // Check if this particular design (poster.id) is present AT ALL in selectedDesigns.
+            // This is for visual 'selected' class, not for unique selection enforcement.
+            const isAnyInstanceSelected = selectedDesigns.some(design => design.id === poster.id);
+            if (isAnyInstanceSelected) {
                 productDiv.classList.add('selected');
+            } else {
+                productDiv.classList.remove('selected');
             }
 
             // Custom Design Options HTML (similar to Framed Posters)
+            // The checkbox and its section should reflect the state of the *current product listing*
+            // not a specific instance in selectedDesigns for multiple selections.
             const customDesignHtml = poster.isCustomizable ? `
                 <div class="custom-design-option">
                     <label>
-                        <input type="checkbox" id="custom-${poster.id}" class="custom-design-checkbox" ${isSelected && selectedDesigns.find(d => d.id === poster.id).isCustomDesign ? 'checked' : ''}>
+                        <input type="checkbox" id="custom-${poster.id}" class="custom-design-checkbox">
                         Custom Design (+${CUSTOM_DESIGN_FEE_PER_POSTER} L.E)
                     </label>
-                    <div class="custom-image-upload" id="upload-section-${poster.id}" style="display:${isSelected && selectedDesigns.find(d => d.id === poster.id).isCustomDesign ? 'block' : 'none'};">
+                    <div class="custom-image-upload" id="upload-section-${poster.id}" style="display:none;">
                         <input type="file" id="image-${poster.id}" accept="image/*">
                         <p class="custom-design-info">
                             After ordering, please send your image via WhatsApp to **01285272577**, including your **full name from the order** and **shipment number**.
@@ -329,53 +332,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 const imageInput = productDiv.querySelector(`#image-${poster.id}`);
                 const selectBtn = productDiv.querySelector(`.select-btn[data-id="${poster.id}"]`);
 
-                if (customCheckbox && uploadSection && imageInput && selectBtn) {
-                    // Initial state for select button based on custom design and file input
-                    const currentSelectedDesign = selectedDesigns.find(d => d.id === poster.id);
-                    if (currentSelectedDesign && currentSelectedDesign.isCustomDesign && currentSelectedDesign.customImageFileName === 'Image not provided on order, client must send via WhatsApp.') {
-                        // If it's a custom design already selected but no file was provided yet, keep select button disabled
-                        selectBtn.disabled = true;
-                    } else if (customCheckbox.checked && !imageInput.files.length) {
-                        selectBtn.disabled = true;
-                    }
+                // Restore custom state from selectedDesigns if this exact product+custom combo was picked
+                const existingInstance = selectedDesigns.find(d => d.id === poster.id && d.isCustomDesign);
+                if (existingInstance) {
+                    if (customCheckbox) customCheckbox.checked = true;
+                    if (uploadSection) uploadSection.style.display = 'block';
+                    // Note: Cannot re-populate file input for security reasons. User would re-select.
+                    // This is why customImageFileName is important for confirmation page.
+                }
 
-                    customCheckbox.addEventListener('change', () => {
-                        uploadSection.style.display = customCheckbox.checked ? 'block' : 'none';
-                        // If selected, and no file is chosen, disable the select button
-                        selectBtn.disabled = customCheckbox.checked && imageInput.files.length === 0;
-                        // Update selectedDesigns array if this poster is already selected
-                        const existingIdx = selectedDesigns.findIndex(d => d.id === poster.id);
-                        if (existingIdx !== -1) {
-                            selectedDesigns[existingIdx].isCustomDesign = customCheckbox.checked;
-                            // Reset custom image filename if checkbox is unchecked
-                            if (!customCheckbox.checked) {
-                                selectedDesigns[existingIdx].customImageFileName = 'N/A';
-                            } else if (imageInput.files.length > 0) {
-                                selectedDesigns[existingIdx].customImageFileName = imageInput.files[0].name;
-                            } else {
-                                selectedDesigns[existingIdx].customImageFileName = 'Image not provided on order, client must send via WhatsApp.';
-                            }
-                            // Update session storage
-                            currentPackSelection.selectedDesigns = selectedDesigns;
-                            sessionStorage.setItem('currentPosterPackSelection', JSON.stringify(currentPackSelection));
-                        }
+                // Manage disabled state of 'Select Design' button based on custom choice and file upload
+                if (selectBtn) { // Ensure button exists
+                    selectBtn.disabled = (customCheckbox && customCheckbox.checked && (!imageInput || imageInput.files.length === 0));
+
+                    customCheckbox && customCheckbox.addEventListener('change', () => {
+                        uploadSection && (uploadSection.style.display = customCheckbox.checked ? 'block' : 'none');
+                        selectBtn.disabled = customCheckbox.checked && (!imageInput || imageInput.files.length === 0);
                     });
 
-                    imageInput.addEventListener('change', () => {
-                        selectBtn.disabled = customCheckbox.checked && imageInput.files.length === 0;
-                        // Update selectedDesigns array if this poster is already selected
-                        const existingIdx = selectedDesigns.findIndex(d => d.id === poster.id);
-                        if (existingIdx !== -1) {
-                            selectedDesigns[existingIdx].customImageFileName = imageInput.files.length > 0 ? imageInput.files[0].name : 'Image not provided on order, client must send via WhatsApp.';
-                            // Update session storage
-                            currentPackSelection.selectedDesigns = selectedDesigns;
-                            sessionStorage.setItem('currentPosterPackSelection', JSON.stringify(currentPackSelection));
-                        }
+                    imageInput && imageInput.addEventListener('change', () => {
+                        selectBtn.disabled = customCheckbox.checked && (!imageInput || imageInput.files.length === 0);
                     });
                 }
             }
         });
         document.getElementById("productCount").innerText = `${postersToRender.length} Individual Designs Available`;
+        updateSelectionStatus(); // Re-evaluate selection status after re-rendering
     }
 
     /**
@@ -454,70 +436,117 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
 
-    // Click handler for individual poster "Select Design" buttons
+    // Click handler for individual poster "Select Design" buttons AND custom options
     container.addEventListener('click', e => {
-        if (!e.target.classList.contains('select-btn')) return;
+        const productDiv = e.target.closest('.product');
+        if (!productDiv) return; // Ensure click is within a product div
 
-        const button = e.target;
-        const posterId = button.getAttribute('data-id');
-        const posterName = button.getAttribute('data-name');
-        const posterDiv = button.closest('.product');
-        const posterImage = posterDiv.querySelector('.product-img').src;
+        const posterId = productDiv.querySelector('.select-btn').getAttribute('data-id');
+        const posterName = productDiv.querySelector('.product-name').innerText;
+        const posterImage = productDiv.querySelector('.product-img').src;
 
-        // Get custom design elements for this product
-        const customCheckbox = posterDiv.querySelector(`#custom-${posterId}`);
-        const imageInput = posterDiv.querySelector(`#image-${posterId}`);
+        // Get custom design elements for this product (always retrieve fresh from DOM)
+        const customCheckbox = productDiv.querySelector(`#custom-${posterId}`);
+        const imageInput = productDiv.querySelector(`#image-${posterId}`);
+        const selectBtn = productDiv.querySelector(`.select-btn[data-id="${posterId}"]`);
 
         let isCustomDesign = false;
         let customImageFileName = 'N/A';
 
+        // Update custom status if checkbox is present and checked
         if (customCheckbox && customCheckbox.checked) {
             isCustomDesign = true;
             customImageFileName = (imageInput && imageInput.files.length > 0) ?
                                   imageInput.files[0].name : 'Image not provided on order, client must send via WhatsApp.';
-
-            // If custom is selected but no file is chosen, prevent selection.
-            if (imageInput && imageInput.files.length === 0) {
-                window.showNotification('Please select your custom image file for this design first.', 'warning');
-                return;
-            }
         }
 
+        // --- Handle clicks on custom checkbox or file input specifically ---
+        if (e.target.classList.contains('custom-design-checkbox')) {
+            // The change listener on the checkbox handles internal logic (display, button disabled state)
+            // and updates selectedDesigns if this design is already selected.
+            // We just need to re-render to reflect potentially new disabled state on other buttons
+            // or re-evaluate selections if adding/removing custom.
+            // No direct selection/deselection of the *poster* happens from this click.
+            console.log(`Custom checkbox for ${posterName} toggled.`);
+            updateSelectionStatus(); // Important to update counts and save state
+            return; // Exit, don't proceed with poster selection/deselection logic
+        }
 
-        // Ensure poster object has all necessary details for storage
-        const fullPosterDetails = allIndividualPosters.find(p => p.id === posterId);
-        if (!fullPosterDetails) {
-            console.error("Selected poster details not found in allIndividualPosters for ID:", posterId);
+        if (e.target.closest('.custom-image-upload')) {
+            // The change listener on the file input handles its logic.
+            // No direct selection/deselection of the *poster* happens from this click.
+            console.log(`Custom image input for ${posterName} interacted with.`);
+            updateSelectionStatus(); // Important to update counts and save state
+            return; // Exit
+        }
+
+        // --- Now handle clicks that are meant to select/deselect the *poster* itself ---
+        // This includes clicks on the 'Select Design' button or general product area (excluding custom options)
+
+        // Prevent selection if the 'Select Design' button is disabled (e.g., custom chosen but no file)
+        if (selectBtn && selectBtn.disabled) {
+            window.showNotification('Please provide the custom image file first or uncheck "Custom Design".', 'warning');
             return;
         }
 
-        const existingSelectionIndex = selectedDesigns.findIndex(design => design.id === posterId);
+        // We need to check the current state of this specific design in selectedDesigns.
+        // For allowing multiple selections, we'll check if the *number* of this design currently selected
+        // allows for another selection, or if we need to remove one.
 
-        if (existingSelectionIndex > -1) {
-            // Already selected, so unselect it
-            selectedDesigns.splice(existingSelectionIndex, 1);
-            posterDiv.classList.remove('selected');
-            window.showNotification(`"${posterName}" unselected.`, 'warning');
-        } else {
-            // Not selected, try to select it
-            if (selectedDesigns.length < requiredPosterCount) {
-                selectedDesigns.push({
-                    id: posterId,
-                    name: posterName,
-                    image: posterImage,
-                    category: fullPosterDetails.category, // Store category
-                    subcategory: fullPosterDetails.subcategory, // Store subcategory
-                    isCustomDesign: isCustomDesign, // Store custom status
-                    customImageFileName: customImageFileName // Store custom file name
-                });
-                posterDiv.classList.add('selected');
-                window.showNotification(`"${posterName}" selected!`);
-            } else {
-                window.showNotification(`You have already selected ${requiredPosterCount} posters. Please unselect one first to choose another.`, 'warning');
+        // Find ALL currently selected instances of this specific design (posterId)
+        const existingInstancesOfThisDesign = selectedDesigns.filter(design =>
+            design.id === posterId &&
+            design.isCustomDesign === isCustomDesign &&
+            design.customImageFileName === customImageFileName
+        );
+
+        if (existingInstancesOfThisDesign.length > 0 && selectedDesigns.length === requiredPosterCount) {
+             // If we've already selected max posters AND this specific design is already picked,
+             // then this click means we want to UNSELECT one instance of it.
+             // This is a common UX for toggling selection when max is reached.
+             const indexToRemove = selectedDesigns.findIndex(design =>
+                 design.id === posterId &&
+                 design.isCustomDesign === isCustomDesign &&
+                 design.customImageFileName === customImageFileName
+             );
+             if (indexToRemove !== -1) {
+                 selectedDesigns.splice(indexToRemove, 1);
+                 window.showNotification(`"${posterName}" unselected.`, 'warning');
+             }
+        } else if (selectedDesigns.length < requiredPosterCount) {
+            // We can still add more designs
+            const fullPosterDetails = allIndividualPosters.find(p => p.id === posterId);
+            if (!fullPosterDetails) {
+                console.error("Selected poster details not found in allIndividualPosters for ID:", posterId);
+                return;
             }
+            selectedDesigns.push({
+                id: posterId,
+                name: posterName,
+                image: posterImage,
+                category: fullPosterDetails.category,
+                subcategory: fullPosterDetails.subcategory,
+                isCustomDesign: isCustomDesign,
+                customImageFileName: customImageFileName
+            });
+            window.showNotification(`"${posterName}" selected!`);
+        } else {
+            // Max selections reached, and this specific design is not being unselected.
+            window.showNotification(`You have already selected ${requiredPosterCount} posters. Please unselect one first to choose another.`, 'warning');
         }
-        updateSelectionStatus();
+
+        // After modification of selectedDesigns array, ensure visual 'selected' class is correct.
+        // A product is 'selected' if ANY instance of it exists in the selectedDesigns array.
+        const isCurrentlySelectedVisually = selectedDesigns.some(design => design.id === posterId);
+        if (isCurrentlySelectedVisually) {
+            productDiv.classList.add('selected');
+        } else {
+            productDiv.classList.remove('selected');
+        }
+
+        updateSelectionStatus(); // Always update status after attempted selection/deselection
     });
+
 
     // Add Pack to Basket button click handler
     if (addPackToBasketBtn) {
@@ -644,6 +673,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // CRITICAL INITIALIZATION FIX for default filter state
+    // This runs once when DOMContentLoaded fires.
     const allSubcategoryCheckboxes = [subMoviesSeriesCheckbox, subCarsCheckbox, subMusiciansCheckbox, subQuotesCheckbox, subOtherPostersCheckbox, subCustomPostersCheckbox];
     
     // Set all subcategory checkboxes to checked by default on load
