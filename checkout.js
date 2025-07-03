@@ -1,4 +1,4 @@
-// checkout.js - Full Code (Updated to Generate Order Shipment Number and handle all fields including Poster Packs)
+// checkout.js - Full Code (Updated to Generate Order Shipment Number and handle all fields including Poster Packs, and updated Cairo shipping price)
 document.addEventListener('DOMContentLoaded', () => {
     // console.log("checkout.js DOMContentLoaded fired.");
 
@@ -16,9 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let shippingFee = 0;
     let totalOrderPrice = 0;
 
-    // Shipping rates
+    // Shipping rates (UPDATED CAIRO PRICE)
     const shippingRates = {
-        'Cairo': 70,
+        'Cairo': 75, // Changed from 70 to 75
         'Alexandria': 100,
         'Other Regions': 110
     };
