@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Frave Poster Packs</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lobster&family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/ethnocentric" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Specific styles for Poster Packs page - can be moved to style.css if desired */
+        .products-page-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 20px auto 0 auto;
+            padding: 0 40px;
+            color: #F9F5F1;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2em;
+            letter-spacing: 1px;
+            padding-top: 100px; /* Adjust for fixed header */
+        }
+        .product-count {
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        .products-container {
+            display: grid;
+            gap: 25px;
+            padding: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product {
+            background-color: #B27555;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.8s ease-out;
+            overflow: visible; /* Important for hover effect */
+        }
+        .product:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 25px rgba(89, 50, 46, 0.4);
+            overflow: visible;
+        }
+
+        .product img {
+            width: 100%;
+            height: 200px; /* Consistent height */
+            object-fit: cover; /* Cover instead of contain for packs */
+            border-radius: 10px;
+            transition: transform 0.3s ease, z-index 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            z-index: 1;
+            box-shadow: none;
+        }
+
+        .product:hover .product-img {
+            transform: scale(1.05); /* Less aggressive zoom for packs */
+            z-index: 10;
+            box-shadow: 0 5px 15px rgba(89, 50, 46, 0.6);
+        }
+
+        .product-name {
+            font-size: 24px;
+            margin: 15px 0 10px;
+            font-family: 'Orbitron', sans-serif;
+            border-bottom: 2px solid #59322E;
+            padding-bottom: 8px;
+            word-wrap: break-word;
+        }
+        .pack-price {
+            margin-top: 10px;
+            display: block;
+            font-size: 20px;
+            font-family: 'Bebas Neue', sans-serif;
+            color: #F9F5F1;
+            font-weight: bold;
+        }
+        .pack-details {
+            font-size: 0.9em;
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+        .pack-details span {
+            display: block; /* Each detail on new line */
+        }
+
+        .size-label, .quantity-label {
+            margin-top: 10px;
+            display: block;
+            font-size: 18px;
+            font-family: 'Bebas Neue', sans-serif;
+            color: #F9F5F1;
+            text-align: left;
+            margin-left: 10px;
+        }
+        select, input[type="number"] {
+            margin-top: 5px;
+            padding: 8px;
+            width: calc(100% - 20px); /* Adjust padding */
+            border: 1px solid #F9F5F1;
+            background-color: #444;
+            color: #F9F5F1;
+            font-size: 16px;
+            border-radius: 5px;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23F9F5F1%22%20d%3D%22M287%20165.7L154.7%2033.4c-6.8-6.8-17.6-6.8-24.4%200l-132.3%20132.3c-6.8%206.8-6.8%2017.6%200%2024.4l24.4%2024.4c6.8%206.8%2017.6%206.8%2024.4%200l90.3-90.3L238.2%20214.5c6.8%206.8%2017.6%206.8%2024.4%200l24.4-24.4c6.8-6.8%206.8-17.6%200-24.4z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 8px top 50%;
+            background-size: 12px auto;
+            margin-bottom: 10px; /* Space below dropdown */
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .select-design-btn {
+            margin-top: 15px;
+            border: 2px solid #59322E;
+            color: #F9F5F1;
+            background-color: transparent;
+            padding: 12px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.2s ease;
+            border-radius: 5px;
+        }
+        .select-design-btn:hover {
+            background-color: #59322E;
+            color: #F9F5F1;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(89, 50, 46, 0.4);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .products-page-controls {
+                padding: 0 15px;
+                font-size: 1em;
+                padding-top: 80px;
+            }
+            .products-container {
+                padding: 20px;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                padding-top: 0;
+            }
+            .product-name {
+                font-size: 20px;
+            }
+            .pack-price, .size-label, .quantity-label {
+                font-size: 16px;
+            }
+            select, input[type="number"] {
+                font-size: 14px;
+                padding: 6px;
+            }
+            .select-design-btn {
+                padding: 10px;
+                font-size: 1em;
+            }
+        }
+        @media (max-width: 480px) {
+            .products-container {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+            .products-page-controls {
+                padding-top: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <audio id="backgroundMusic" loop autoplay>
+        <source src="sounds/background-music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div class="top-icons">
+        <img src="images/settings.png" alt="Settings" class="icon" id="settingsIcon">
+        <i class="fas fa-search icon" id="searchIcon"></i>
+        <img src="images/basket.png" alt="Basket" class="icon" id="basketIcon">
+    </div>
+
+    <div class="menu" id="settingsMenu">
+        <ul>
+            <li><a href="#" class="category-link">Category</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <ul class="submenu" id="categorySubMenu">
+            <li id="framedPostersCategoryLink"><a href="#">Framed Posters <i class="fas fa-chevron-right submenu-arrow"></i></a></li>
+            <li id="postersCategoryLink"><a href="#">Poster Packs <i class="fas fa-chevron-right submenu-arrow"></i></a></li>
+            <li><a href="stickers.html">Stickers</a></li>
+        </ul>
+    </div>
+
+    <div class="menu sub-menu-overlay" id="framedPostersSubMenu">
+        <ul>
+            <li class="sub-menu-header" id="backToCategoryMenuFramed"><i class="fas fa-chevron-left submenu-arrow"></i> Framed Posters</li>
+            <li><a href="shop.html?sub=Movies%20%26%20Series">Movies & Series</a></li>
+            <li><a href="shop.html?sub=Cars">Cars</a></li>
+            <li><a href="shop.html?sub=Musicians">Musicians</a></li>
+            <li><a href="shop.html?sub=Quotes">Football</a></li>
+            <li><a href="shop.html?sub=Other">Quotes & Other</a></li>
+            <li><a href="shop.html?sub=Custom">Custom Designs</a></li>
+        </ul>
+    </div>
+
+    <div class="menu sub-menu-overlay" id="postersSubMenu">
+        <ul>
+            <li class="sub-menu-header" id="backToCategoryMenuPosters"><i class="fas fa-chevron-left submenu-arrow"></i> Poster Packs</li>
+            <li><a href="poster_packs.html">All Packs</a></li>
+        </ul>
+    </div>
+
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search products..." autofocus>
+            <button id="searchCloseBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="search-results" id="searchResults"></div>
+    </div>
+
+    <div class="basket-menu" id="basketMenu">
+        <div class="basket-items" id="basketItems">
+            <p>Your basket is empty.</p>
+        </div>
+        <div class="total-price" id="totalPrice">Total: 0 L.E</div>
+        <button class="checkout-btn" id="checkoutBtn">Checkout</button>
+    </div>
+
+    <div class="filter-overlay" id="filterOverlay">
+        <div class="filter-header">
+            <h3>Filters</h3>
+            <button class="filter-close-btn" id="filterCloseBtn">&times;</button>
+        </div>
+        <div class="filter-section">
+            <h4>Pack Size</h4>
+            <div class="filter-option">
+                <input type="checkbox" id="pack5" value="5 Posters" checked>
+                <label for="pack5">5 Posters</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="pack10" value="10 Posters" checked>
+                <label for="pack10">10 Posters</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="pack20" value="20 Posters" checked>
+                <label for="pack20">20 Posters</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="pack40" value="40 Posters" checked>
+                <label for="pack40">40 Posters</label>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <h4>Price Range</h4>
+            <input type="range" id="priceRangeSlider" min="0" max="1000" value="1000"> 
+            <div class="price-range-output">
+                <span id="minPrice">0 L.E</span>
+                <span id="maxPrice">1000 L.E</span>
+            </div>
+        </div>
+        <div class="filter-section">
+            <h4>Sort By</h4>
+            <div class="filter-option">
+                <input type="radio" id="sortLowToHigh" name="sortOrder" value="lowToHigh">
+                <label for="sortLowToHigh">Price: Low to High</label>
+            </div>
+            <div class="filter-option">
+                <input type="radio" id="sortHighToLow" name="sortOrder" value="highToLow">
+                <label for="sortHighToLow">Price: High to Low</label>
+            </div>
+            <div class="filter-option">
+                <input type="radio" id="sortDefault" name="sortOrder" value="default" checked>
+                <label for="sortDefault">Default Order</label>
+            </div>
+        </div>
+        <div class="filter-actions">
+            <button class="filter-btn" id="applyFiltersBtn">Apply Filters</button>
+            <button class="filter-btn filter-clear-btn" id="clearFiltersBtn">Clear Filters</button>
+        </div>
+    </div>
+
+    <div class="logo-banner">
+        <img src="images/logo.png" alt="Logo" class="logo" />
+    </div>
+
+    <div id="functionalityWarning" class="warning-message">
+        <p>If buttons or menu don't work please refresh the page.</p>
+    </div>
+    <div class="products-page-controls">
+        <span class="product-count" id="productCount">0 Products</span>
+        <i class="fas fa-filter icon products-filter-icon" id="filterIcon"></i>
+    </div>
+
+    <div class="products-container" id="productsContainer"></div>
+
+    <div class="footer-description">
+        High-quality framed posters and stickers
+    </div>
+    <div class="since">
+        Since 2025
+        <div class="social-icons">
+            <a href="https://www.instagram.com/frave.eg" target="_blank"><img src="images/ig.png" alt="Instagram" /></a>
+            <a href="https://www.tiktok.com/@frave.eg" target="_blank"><img src="images/tiktok.png" alt="TikTok" /></a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="poster_packs.js"></script>
+</body>
+</html>

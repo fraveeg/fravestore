@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Select Posters - Frave</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lobster&family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/ethnocentric" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <audio id="backgroundMusic" loop autoplay>
+        <source src="sounds/background-music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div class="top-icons">
+        <img src="images/settings.png" alt="Settings" class="icon" id="settingsIcon">
+        <i class="fas fa-search icon" id="searchIcon"></i>
+        <img src="images/basket.png" alt="Basket" class="icon" id="basketIcon">
+    </div>
+
+    <div class="menu" id="settingsMenu">
+        <ul>
+            <li><a href="#" class="category-link">Category</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <ul class="submenu" id="categorySubMenu">
+            <li id="framedPostersCategoryLink"><a href="#">Framed Posters <i class="fas fa-chevron-right submenu-arrow"></i></a></li>
+            <li id="postersCategoryLink"><a href="#">Poster Packs <i class="fas fa-chevron-right submenu-arrow"></i></a></li>
+            <li><a href="stickers.html">Stickers</a></li>
+        </ul>
+    </div>
+
+    <div class="menu sub-menu-overlay" id="framedPostersSubMenu">
+        <ul>
+            <li class="sub-menu-header" id="backToCategoryMenuFramed"><i class="fas fa-chevron-left submenu-arrow"></i> Framed Posters</li>
+            <li><a href="shop.html?sub=Movies%20%26%20Series">Movies & Series</a></li>
+            <li><a href="shop.html?sub=Cars">Cars</a></li>
+            <li><a href="shop.html?sub=Musicians">Musicians</a></li>
+            <li><a href="shop.html?sub=Quotes">Football</a></li>
+            <li><a href="shop.html?sub=Other">Quotes & Other</a></li>
+            <li><a href="shop.html?sub=Custom">Custom Designs</a></li>
+        </ul>
+    </div>
+
+    <div class="menu sub-menu-overlay" id="postersSubMenu">
+        <ul>
+            <li class="sub-menu-header" id="backToCategoryMenuPosters"><i class="fas fa-chevron-left submenu-arrow"></i> Poster Packs</li>
+            <li><a href="poster_packs.html">All Packs</a></li>
+        </ul>
+    </div>
+
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search products..." autofocus>
+            <button id="searchCloseBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="search-results" id="searchResults"></div>
+    </div>
+
+    <div class="basket-menu" id="basketMenu">
+        <div class="basket-items" id="basketItems">
+            <p>Your basket is empty.</p>
+        </div>
+        <div class="total-price" id="totalPrice">Total: 0 L.E</div>
+        <button class="checkout-btn" id="checkoutBtn">Checkout</button>
+    </div>
+
+    <div class="filter-overlay" id="filterOverlay">
+        <div class="filter-header">
+            <h3>Filters</h3>
+            <button class="filter-close-btn" id="filterCloseBtn">&times;</button>
+        </div>
+        <div class="filter-section product-type-filter">
+            <h4>Product Type</h4>
+            <div class="filter-option">
+                <input type="checkbox" id="filterPosters" value="Poster" checked disabled>
+                <label for="filterPosters">Posters</label>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <h4>Subcategory</h4>
+            <div class="filter-option">
+                <input type="checkbox" id="subMoviesSeries" value="Movies & Series" checked>
+                <label for="subMoviesSeries">Movies & Series</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="subCars" value="Cars" checked>
+                <label for="subCars">Cars</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="subMusicians" value="Musicians" checked>
+                <label for="subMusicians">Musicians</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="subQuotes" value="Quotes" checked>
+                <label for="subQuotes">Football</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="subOtherPosters" value="Other" checked>
+                <label for="subOtherPosters">Quotes & Other</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="subCustomPosters" value="Custom" checked>
+                <label for="subCustomPosters">Custom Designs</label>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <h4>Price Range (N/A for selection)</h4>
+            <input type="range" id="priceRangeSlider" min="0" max="150" value="150" disabled>
+            <div class="price-range-output">
+                <span id="minPrice">0 L.E</span>
+                <span id="maxPrice">150 L.E</span>
+            </div>
+        </div>
+        <div class="filter-section">
+            <h4>Sort By</h4>
+            <div class="filter-option">
+                <input type="radio" id="sortLowToHigh" name="sortOrder" value="lowToHigh">
+                <label for="sortLowToHigh">Price: Low to High</label>
+            </div>
+            <div class="filter-option">
+                <input type="radio" id="sortHighToLow" name="sortOrder" value="highToLow">
+                <label for="sortHighToLow">Price: High to Low</label>
+            </div>
+            <div class="filter-option">
+                <input type="radio" id="sortDefault" name="sortOrder" value="default" checked>
+                <label for="sortDefault">Default Order</label>
+            </div>
+        </div>
+        <div class="filter-actions">
+            <button class="filter-btn" id="applyFiltersBtn">Apply Filters</button>
+            <button class="filter-btn filter-clear-btn" id="clearFiltersBtn">Clear Filters</button>
+        </div>
+    </div>
+
+    <div class="logo-banner">
+        <img src="images/logo.png" alt="Logo" class="logo" />
+    </div>
+
+    <div id="functionalityWarning" class="warning-message">
+        <p>If buttons or menu don't work please refresh the page.</p>
+    </div>
+
+    <div class="selection-header">
+        <h2 id="packNameDisplay">Select Your Posters</h2>
+        <p class="selection-info">You need to select <strong id="requiredSelections">X</strong> posters for your pack. <br>
+           Selected: <span id="currentSelections">0</span> / <span id="maxSelections">X</span></p>
+        <p class="selection-tip">Click 'Add' to select a design. Click 'Remove' to unselect an instance. Use filter to change category.</p>
+        <div class="selection-progress">
+            <div class="selection-progress-bar" id="selectionProgressBar"></div>
+        </div>
+    </div>
+
+    <div class="products-page-controls">
+        <span class="product-count" id="productCount">0 Individual Designs Available</span>
+        <i class="fas fa-filter icon products-filter-icon" id="filterIcon"></i>
+    </div>
+
+    <div class="products-container" id="productsContainer"></div>
+
+    <div class="add-pack-to-basket-container">
+        <button class="add-pack-to-basket-btn" id="addPackToBasketBtn" disabled>Add Pack to Basket</button>
+    </div>
+
+    <div class="footer-description">
+        High-quality framed posters and stickers
+    </div>
+    <div class="since">
+        Since 2025
+        <div class="social-icons">
+            <a href="https://www.instagram.com/frave.eg" target="_blank"><img src="images/ig.png" alt="Instagram" /></a>
+            <a href="https://www.tiktok.com/@frave.eg" target="_blank"><img src="images/tiktok.png" alt="TikTok" /></a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="poster_selection.js"></script>
+</body>
+</html>
