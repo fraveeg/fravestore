@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // selectedSubcategories will be populated by filterProducts() based on UI state
     let currentSortOrder = 'default';
 
-    const CUSTOM_DESIGN_FEE = 20; // Reverted to 20 L.E.
+    const CUSTOM_DESIGN_FEE = 0; // Reverted to 20 L.E.
 
     if (!container || !productCountSpan || !notificationContainer) { // Check for notificationContainer
         console.error("shop.js: CRITICAL ERROR: Essential DOM elements not found. Page might not render correctly.");
